@@ -16,39 +16,33 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  deploy:
+    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
     steps:
-      - name: Checkout
+      - name: Checkout main
         uses: actions/checkout@v4
-
+        with:
+          ref: main
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
+          node-version: 20
+          cache: npm
+      - name: Install
         run: npm ci
-
-      - name: Build (Vite) with repo base
-        run: |
-          REPO_NAME="${GITHUB_REPOSITORY#*/}"
-          echo "Building with base=/${REPO_NAME}/"
-          npm run build -- --base="/${REPO_NAME}/"
-
-      - name: Upload Pages artifact
+      - name: Build
+        run: npm run build
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Add SPA fallback (404.html)
+        run: cp dist/index.html dist/404.html
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
-
-  deploy:
-    needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

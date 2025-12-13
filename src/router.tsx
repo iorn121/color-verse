@@ -17,4 +17,5 @@ export const router = createBrowserRouter(
       <Route path="image" element={<ImageAdjustPage />} />
     </Route>,
   ),
+  { basename: import.meta.env.BASE_URL },
 );

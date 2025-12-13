@@ -12,6 +12,14 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      // アイコン等を favicon.svg から自動生成（ビルド時）
+      pwaAssets: {
+        image: 'public/favicon.svg',
+        // 2023 推奨リンクセット
+        htmlPreset: '2023',
+        // 生成したアイコンを manifest.icons に反映
+        overrideManifestIcons: true,
+      },
       manifest: {
         name: 'ColorVerse',
         short_name: 'ColorVerse',

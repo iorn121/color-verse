@@ -6,13 +6,13 @@ export function clamp(value: number, min: number, max: number): number {
 }
 
 export function hexToRgb(hex: string): Rgb | null {
-  const normalized = hex.replace("#", "").trim();
+  const normalized = hex.replace('#', '').trim();
   const full =
     normalized.length === 3
       ? normalized
-          .split("")
+          .split('')
           .map((c) => c + c)
-          .join("")
+          .join('')
       : normalized;
   if (!/^[0-9a-fA-F]{6}$/.test(full)) return null;
   const r = parseInt(full.slice(0, 2), 16);
@@ -22,8 +22,7 @@ export function hexToRgb(hex: string): Rgb | null {
 }
 
 export function rgbToHex({ r, g, b }: Rgb): string {
-  const toHex = (n: number) =>
-    clamp(Math.round(n), 0, 255).toString(16).padStart(2, "0");
+  const toHex = (n: number) => clamp(Math.round(n), 0, 255).toString(16).padStart(2, '0');
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
 }
 

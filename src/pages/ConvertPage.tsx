@@ -1,8 +1,8 @@
-import ConversionTool from "../components/ConversionTool";
+import ConversionTool from '../components/ConversionTool';
 
 export default function ConvertPage() {
   return (
-    <div style={{ display: "grid", gap: 12 }}>
+    <div style={{ display: 'grid', gap: 12 }}>
       <h2 style={{ margin: 0 }} className="secondary-gradient-text">
         Hex / RGB / HSL 変換
       </h2>

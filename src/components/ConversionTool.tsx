@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
-import { Hsl, Rgb, hexToRgb, hslToRgb, rgbToHex, rgbToHsl } from "../lib/color";
+import { useMemo, useState } from 'react';
+
+import { Hsl, Rgb, hexToRgb, rgbToHex, rgbToHsl } from '../lib/color';
 
 export default function ConversionTool() {
-  const [hex, setHex] = useState("#0EA5E9");
+  const [hex, setHex] = useState('#0EA5E9');
   const rgb: Rgb | null = useMemo(() => hexToRgb(hex), [hex]);
   const hsl: Hsl | null = useMemo(() => (rgb ? rgbToHsl(rgb) : null), [rgb]);
 
@@ -13,16 +14,16 @@ export default function ConversionTool() {
   const rgbHsl = useMemo(() => rgbToHsl({ r, g, b }), [r, g, b]);
 
   return (
-    <div style={{ display: "grid", gap: 20, maxWidth: 720 }}>
-      <section style={{ display: "grid", gap: 8 }}>
+    <div style={{ display: 'grid', gap: 20, maxWidth: 720 }}>
+      <section style={{ display: 'grid', gap: 8 }}>
         <h3 style={{ margin: 0 }}>Hex → RGB/HSL</h3>
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <input
             value={hex}
             onChange={(e) => setHex(e.target.value)}
             style={{
-              fontFamily: "ui-monospace, Menlo, monospace",
-              padding: "8px 10px",
+              fontFamily: 'ui-monospace, Menlo, monospace',
+              padding: '8px 10px',
               width: 160,
             }}
           />
@@ -30,36 +31,36 @@ export default function ConversionTool() {
             style={{
               width: 24,
               height: 24,
-              border: "1px solid #e5e7eb",
+              border: '1px solid #e5e7eb',
               background: hex,
             }}
           />
         </div>
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <div
             style={{
-              padding: "4px 8px",
-              border: "1px solid #e5e7eb",
+              padding: '4px 8px',
+              border: '1px solid #e5e7eb',
               borderRadius: 6,
             }}
           >
-            {rgb ? `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})` : "invalid"}
+            {rgb ? `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})` : 'invalid'}
           </div>
           <div
             style={{
-              padding: "4px 8px",
-              border: "1px solid #e5e7eb",
+              padding: '4px 8px',
+              border: '1px solid #e5e7eb',
               borderRadius: 6,
             }}
           >
-            {hsl ? `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)` : "invalid"}
+            {hsl ? `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)` : 'invalid'}
           </div>
         </div>
       </section>
 
-      <section style={{ display: "grid", gap: 8 }}>
+      <section style={{ display: 'grid', gap: 8 }}>
         <h3 style={{ margin: 0 }}>RGB → Hex/HSL</h3>
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <input
             type="number"
             min={0}
@@ -88,16 +89,16 @@ export default function ConversionTool() {
             style={{
               width: 24,
               height: 24,
-              border: "1px solid #e5e7eb",
+              border: '1px solid #e5e7eb',
               background: rgbHex,
             }}
           />
         </div>
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <div
             style={{
-              padding: "4px 8px",
-              border: "1px solid #e5e7eb",
+              padding: '4px 8px',
+              border: '1px solid #e5e7eb',
               borderRadius: 6,
             }}
           >
@@ -105,8 +106,8 @@ export default function ConversionTool() {
           </div>
           <div
             style={{
-              padding: "4px 8px",
-              border: "1px solid #e5e7eb",
+              padding: '4px 8px',
+              border: '1px solid #e5e7eb',
               borderRadius: 6,
             }}
           >{`hsl(${rgbHsl.h}, ${rgbHsl.s}%, ${rgbHsl.l}%)`}</div>

@@ -1,14 +1,11 @@
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-} from "react-router-dom";
-import RootLayout from "./layouts/RootLayout";
-import HomePage from "./pages/HomePage";
-import PickerPage from "./pages/PickerPage";
-import ConvertPage from "./pages/ConvertPage";
-import TheoryPage from "./pages/TheoryPage";
-import ImageAdjustPage from "./pages/ImageAdjustPage";
+import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
+
+import RootLayout from './layouts/RootLayout';
+import ConvertPage from './pages/ConvertPage';
+import HomePage from './pages/HomePage';
+import ImageAdjustPage from './pages/ImageAdjustPage';
+import PickerPage from './pages/PickerPage';
+import TheoryPage from './pages/TheoryPage';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -18,6 +15,6 @@ export const router = createBrowserRouter(
       <Route path="convert" element={<ConvertPage />} />
       <Route path="theory" element={<TheoryPage />} />
       <Route path="image" element={<ImageAdjustPage />} />
-    </Route>
-  )
+    </Route>,
+  ),
 );

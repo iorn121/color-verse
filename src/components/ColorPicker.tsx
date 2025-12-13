@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
-import { Hsl, Rgb, hexToRgb, hslToRgb, rgbToHex, rgbToHsl } from "../lib/color";
+import { useMemo, useState } from 'react';
+
+import { Hsl, Rgb, hexToRgb, hslToRgb, rgbToHex, rgbToHsl } from '../lib/color';
 
 export default function ColorPicker() {
-  const [hex, setHex] = useState("#4F46E5");
+  const [hex, setHex] = useState('#4F46E5');
 
   const rgb: Rgb | null = useMemo(() => hexToRgb(hex), [hex]);
   const hsl: Hsl | null = useMemo(() => (rgb ? rgbToHsl(rgb) : null), [rgb]);
@@ -19,13 +20,13 @@ export default function ColorPicker() {
   };
 
   return (
-    <div style={{ display: "grid", gap: 12, width: "100%", maxWidth: 680 }}>
+    <div style={{ display: 'grid', gap: 12, width: '100%', maxWidth: 680 }}>
       <div
         style={{
-          display: "flex",
+          display: 'flex',
           gap: 12,
-          alignItems: "center",
-          flexWrap: "wrap",
+          alignItems: 'center',
+          flexWrap: 'wrap',
           rowGap: 8,
           minWidth: 0,
         }}
@@ -38,9 +39,9 @@ export default function ColorPicker() {
           style={{
             width: 48,
             height: 48,
-            border: "none",
+            border: 'none',
             padding: 0,
-            background: "transparent",
+            background: 'transparent',
           }}
         />
         <input
@@ -48,43 +49,43 @@ export default function ColorPicker() {
           onChange={(e) => setHex(e.target.value)}
           aria-label="hex"
           style={{
-            fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-            padding: "8px 10px",
+            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+            padding: '8px 10px',
             width: 140,
             minWidth: 120,
           }}
         />
         <div
           style={{
-            padding: "4px 8px",
-            border: "1px solid #e5e7eb",
+            padding: '4px 8px',
+            border: '1px solid #e5e7eb',
             borderRadius: 6,
-            maxWidth: "100%",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
+            maxWidth: '100%',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
           }}
         >
-          {rgb ? `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})` : "invalid"}
+          {rgb ? `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})` : 'invalid'}
         </div>
         <div
           style={{
-            padding: "4px 8px",
-            border: "1px solid #e5e7eb",
+            padding: '4px 8px',
+            border: '1px solid #e5e7eb',
             borderRadius: 6,
-            maxWidth: "100%",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
+            maxWidth: '100%',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
           }}
         >
-          {hsl ? `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)` : "invalid"}
+          {hsl ? `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)` : 'invalid'}
         </div>
       </div>
 
       {hsl && (
-        <div style={{ display: "grid", gap: 8, width: "100%" }}>
-          <label style={{ display: "grid", gap: 6 }}>
+        <div style={{ display: 'grid', gap: 8, width: '100%' }}>
+          <label style={{ display: 'grid', gap: 6 }}>
             <span>Hue: {hsl.h}°</span>
             <input
               type="range"
@@ -94,7 +95,7 @@ export default function ColorPicker() {
               onChange={(e) => updateFromHsl({ h: Number(e.target.value) })}
             />
           </label>
-          <label style={{ display: "grid", gap: 6 }}>
+          <label style={{ display: 'grid', gap: 6 }}>
             <span>Saturation: {hsl.s}%</span>
             <input
               type="range"
@@ -104,7 +105,7 @@ export default function ColorPicker() {
               onChange={(e) => updateFromHsl({ s: Number(e.target.value) })}
             />
           </label>
-          <label style={{ display: "grid", gap: 6 }}>
+          <label style={{ display: 'grid', gap: 6 }}>
             <span>Lightness: {hsl.l}%</span>
             <input
               type="range"

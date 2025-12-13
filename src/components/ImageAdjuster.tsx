@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
 export default function ImageAdjuster() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -13,7 +13,7 @@ export default function ImageAdjuster() {
     const canvas = canvasRef.current;
     if (!img || !canvas) return;
     if (!img.complete) return;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
     canvas.width = img.naturalWidth;
     canvas.height = img.naturalHeight;
@@ -22,7 +22,7 @@ export default function ImageAdjuster() {
   }, [brightness, contrast, saturate, imageUrl]);
 
   return (
-    <div style={{ display: "grid", gap: 12 }}>
+    <div style={{ display: 'grid', gap: 12 }}>
       <input
         type="file"
         accept="image/*"
@@ -34,8 +34,8 @@ export default function ImageAdjuster() {
         }}
       />
       {imageUrl && (
-        <div style={{ display: "grid", gap: 8 }}>
-          <label style={{ display: "grid", gap: 4 }}>
+        <div style={{ display: 'grid', gap: 8 }}>
+          <label style={{ display: 'grid', gap: 4 }}>
             <span>Brightness: {brightness}%</span>
             <input
               type="range"
@@ -45,7 +45,7 @@ export default function ImageAdjuster() {
               onChange={(e) => setBrightness(Number(e.target.value))}
             />
           </label>
-          <label style={{ display: "grid", gap: 4 }}>
+          <label style={{ display: 'grid', gap: 4 }}>
             <span>Contrast: {contrast}%</span>
             <input
               type="range"
@@ -55,7 +55,7 @@ export default function ImageAdjuster() {
               onChange={(e) => setContrast(Number(e.target.value))}
             />
           </label>
-          <label style={{ display: "grid", gap: 4 }}>
+          <label style={{ display: 'grid', gap: 4 }}>
             <span>Saturation: {saturate}%</span>
             <input
               type="range"
@@ -68,12 +68,12 @@ export default function ImageAdjuster() {
         </div>
       )}
       {imageUrl && (
-        <div style={{ display: "grid", gap: 8 }}>
+        <div style={{ display: 'grid', gap: 8 }}>
           <canvas
             ref={canvasRef}
             style={{
-              maxWidth: "100%",
-              border: "1px solid #e5e7eb",
+              maxWidth: '100%',
+              border: '1px solid #e5e7eb',
               borderRadius: 8,
             }}
           />
@@ -81,7 +81,7 @@ export default function ImageAdjuster() {
             ref={imageRef}
             src={imageUrl}
             alt="source"
-            style={{ display: "none" }}
+            style={{ display: 'none' }}
             onLoad={() => {
               // trigger effect
               setBrightness((v) => v);

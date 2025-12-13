@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 export default function ImageAdjuster() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -8,18 +8,17 @@ export default function ImageAdjuster() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
 
-  useEffect(() => {
+  const drawWith = useCallback((b: number, c: number, s: number) => {
     const img = imageRef.current;
     const canvas = canvasRef.current;
     if (!img || !canvas) return;
-    if (!img.complete) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     canvas.width = img.naturalWidth;
     canvas.height = img.naturalHeight;
-    ctx.filter = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturate}%)`;
+    ctx.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
     ctx.drawImage(img, 0, 0);
-  }, [brightness, contrast, saturate, imageUrl]);
+  }, []);
 
   return (
     <div style={{ display: 'grid', gap: 12 }}>
@@ -42,7 +41,11 @@ export default function ImageAdjuster() {
               min={0}
               max={200}
               value={brightness}
-              onChange={(e) => setBrightness(Number(e.target.value))}
+              onChange={(e) => {
+                const v = Number(e.target.value);
+                setBrightness(v);
+                if (imageRef.current?.complete) drawWith(v, contrast, saturate);
+              }}
             />
           </label>
           <label style={{ display: 'grid', gap: 4 }}>
@@ -52,7 +55,11 @@ export default function ImageAdjuster() {
               min={0}
               max={200}
               value={contrast}
-              onChange={(e) => setContrast(Number(e.target.value))}
+              onChange={(e) => {
+                const v = Number(e.target.value);
+                setContrast(v);
+                if (imageRef.current?.complete) drawWith(brightness, v, saturate);
+              }}
             />
           </label>
           <label style={{ display: 'grid', gap: 4 }}>
@@ -62,7 +69,11 @@ export default function ImageAdjuster() {
               min={0}
               max={200}
               value={saturate}
-              onChange={(e) => setSaturate(Number(e.target.value))}
+              onChange={(e) => {
+                const v = Number(e.target.value);
+                setSaturate(v);
+                if (imageRef.current?.complete) drawWith(brightness, contrast, v);
+              }}
             />
           </label>
         </div>
@@ -82,10 +93,7 @@ export default function ImageAdjuster() {
             src={imageUrl}
             alt="source"
             style={{ display: 'none' }}
-            onLoad={() => {
-              // trigger effect
-              setBrightness((v) => v);
-            }}
+            onLoad={() => drawWith(brightness, contrast, saturate)}
           />
         </div>
       )}

@@ -153,6 +153,9 @@ html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 body {
@@ -164,6 +167,8 @@ body {
   background-color: var(--color-background);
   transition: background-color var(--transition-base),
     color var(--transition-base);
+  min-height: inherit;
+  padding-inline: clamp(12px, 4vw, 32px);
 }
 
 /* ============================================
@@ -320,7 +325,22 @@ code {
    ============================================ */
 
 .gradient-text {
-  background: var(--gradient-rainbow);
+  background: linear-gradient(
+    to right,
+    var(--color-primary),
+    var(--color-secondary)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.secondary-gradient-text {
+  background: linear-gradient(
+    to right,
+    var(--color-secondary),
+    var(--color-primary)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

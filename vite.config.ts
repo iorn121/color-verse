@@ -14,7 +14,9 @@ export default defineConfig({
         theme_color: '#111827',
         background_color: '#111827',
         display: 'standalone',
-        start_url: '/',
+        // GitHub Pages（サブパス）での解決を安定させる
+        start_url: '.',
+        scope: '.',
         lang: 'ja',
       },
       devOptions: {

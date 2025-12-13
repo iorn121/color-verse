@@ -1,10 +1,9 @@
 name: Deploy to GitHub Pages
 
 on:
-workflow_run:
-  workflows: ['CI']
-  branches: ['main']
-  types: ['completed']
+  workflow_run:
+    workflows: ['CI']
+    types: ['completed']
 
 permissions:
   contents: read
@@ -17,24 +16,31 @@ concurrency:
 
 jobs:
   deploy:
-    if: github.event.workflow_run.conclusion == 'success'
+    if: >
+      ${{
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.head_branch == 'main'
+      }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
     steps:
-      - name: Checkout main
+      - name: Checkout triggering commit
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.event.workflow_run.head_sha }}
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
+          node-version: '20'
+          cache: 'npm'
       - name: Install
         run: npm ci
-      - name: Build
-        run: npm run build
+      - name: Build (Vite) with repo base
+        run: |
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          echo "Building with base=/${REPO_NAME}/"
+          npm run build -- --base="/${REPO_NAME}/"
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Add SPA fallback (404.html)

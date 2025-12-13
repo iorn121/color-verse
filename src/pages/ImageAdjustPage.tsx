@@ -1,0 +1,13 @@
+import ImageAdjuster from '../components/ImageAdjuster';
+
+export default function ImageAdjustPage() {
+	return (
+		<div style={{ display: 'grid', gap: 12 }}>
+			<h2 style={{ margin: 0 }}>画像の色調補正</h2>
+			<p style={{ margin: 0, color: '#374151' }}>明度・コントラスト・彩度を調整できます（ブラウザ内 Canvas 処理）。</p>
+			<ImageAdjuster />
+		</div>
+	);
+}
+
+

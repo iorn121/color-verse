@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom';
 
 export default function HomePage() {
 	return (
-		<div style={{ display: 'grid', gap: 16, maxWidth: 880 }}>
-			<h1 style={{ margin: 0 }}>ColorVerse</h1>
-			<p style={{ margin: 0, color: '#374151' }}>
+		<div className="animate-fade-in">
+			<h1 className="gradient-text">ColorVerse</h1>
+			<p>
 				色の学習・ツール・分析を一体化したプラットフォーム。まずは MVP 機能から。
 			</p>
 			<ul style={{ display: 'grid', gap: 8 }}>

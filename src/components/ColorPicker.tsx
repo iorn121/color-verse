@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 
-import { Hsl, Rgb, hexToRgb, hslToRgb, rgbToHex, rgbToHsl } from '../lib/color';
+import { hexToRgb, Hsl, hslToRgb, Rgb, rgbToHex, rgbToHsl } from '../lib/color';
 
 export default function ColorPicker() {
   const [hex, setHex] = useState('#4F46E5');

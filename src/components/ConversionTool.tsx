@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 
-import { Hsl, Rgb, hexToRgb, rgbToHex, rgbToHsl } from '../lib/color';
+import { hexToRgb, Hsl, Rgb, rgbToHex, rgbToHsl } from '../lib/color';
 
 export default function ConversionTool() {
   const [hex, setHex] = useState('#0EA5E9');

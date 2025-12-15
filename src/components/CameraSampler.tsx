@@ -1,79 +1,28 @@
 import { useEffect, useRef, useState } from 'react';
+import Webcam from 'react-webcam';
 
 import { Hsl, Rgb, rgbToHex, rgbToHsl } from '../lib/color';
 
-type UseCameraResult = {
-  start: () => Promise<void>;
-  stop: () => void;
-  error: string | null;
-  isActive: boolean;
-};
-
-function useCamera(streamRef: React.MutableRefObject<MediaStream | null>): UseCameraResult {
-  const [error, setError] = useState<string | null>(null);
-  const [isActive, setIsActive] = useState(false);
-
-  const start = async () => {
-    try {
-      setError(null);
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: { ideal: 'environment' },
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
-        },
-        audio: false,
-      });
-      streamRef.current = stream;
-      setIsActive(true);
-    } catch (e) {
-      setError((e as Error).message ?? 'camera error');
-      setIsActive(false);
-    }
-  };
-
-  const stop = () => {
-    streamRef.current?.getTracks().forEach((t) => t.stop());
-    streamRef.current = null;
-    setIsActive(false);
-  };
-
-  return { start, stop, error, isActive };
-}
-
 export default function CameraSampler() {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const webcamRef = useRef<Webcam | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
   const rafRef = useRef<number | null>(null);
 
-  const { start, stop, error, isActive } = useCamera(streamRef);
-
+  const [active, setActive] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [rgb, setRgb] = useState<Rgb | null>(null);
   const [hsl, setHsl] = useState<Hsl | null>(null);
   const [hex, setHex] = useState<string>('#000000');
 
   useEffect(() => {
-    // attach stream to video when available
-    if (!videoRef.current) return;
-    if (streamRef.current) {
-      videoRef.current.srcObject = streamRef.current;
-      // muted + playsInline でモバイルでも自動再生
-      videoRef.current.muted = true;
-      videoRef.current.play().catch(() => {});
-    }
-  }, [isActive]);
-
-  useEffect(() => {
-    const video = videoRef.current;
     const canvas = canvasRef.current;
-    if (!video || !canvas) return;
-
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     const tick = () => {
-      if (!video.videoWidth || !video.videoHeight) {
+      const video = (webcamRef.current as unknown as { video?: HTMLVideoElement })?.video ?? null;
+      if (!video || !video.videoWidth || !video.videoHeight) {
         rafRef.current = requestAnimationFrame(tick);
         return;
       }
@@ -92,30 +41,36 @@ export default function CameraSampler() {
       setHex(rgbToHex(current));
       rafRef.current = requestAnimationFrame(tick);
     };
-    if (isActive) {
+
+    if (active) {
       rafRef.current = requestAnimationFrame(tick);
     }
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [isActive]);
+  }, [active]);
 
-  useEffect(() => {
-    // cleanup on unmount
-    return () => {
-      stop();
-    };
-  }, [stop]);
+  const videoConstraints: MediaStreamConstraints['video'] = {
+    facingMode: { ideal: 'environment' },
+    width: { ideal: 1280 },
+    height: { ideal: 720 },
+  };
 
   return (
     <div style={{ display: 'grid', gap: 12 }}>
       <div style={{ display: 'flex', gap: 8 }}>
-        {!isActive ? (
-          <button className="btn btn-primary" onClick={start}>
+        {!active ? (
+          <button
+            className="btn btn-primary"
+            onClick={() => {
+              setError(null);
+              setActive(true);
+            }}
+          >
             カメラ開始
           </button>
         ) : (
-          <button className="btn" onClick={stop}>
+          <button className="btn" onClick={() => setActive(false)}>
             停止
           </button>
         )}
@@ -128,28 +83,41 @@ export default function CameraSampler() {
       )}
 
       <div style={{ position: 'relative', width: '100%', maxWidth: 640 }}>
-        <video
-          ref={videoRef}
-          playsInline
-          autoPlay
-          muted
-          style={{ width: '100%', borderRadius: 8, background: '#000' }}
-        />
-        {/* center crosshair */}
-        <div
-          style={{
-            position: 'absolute',
-            left: '50%',
-            top: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 24,
-            height: 24,
-            borderRadius: '50%',
-            border: '2px solid #fff',
-            boxShadow: '0 0 0 2px rgba(0,0,0,0.5)',
-            pointerEvents: 'none',
-          }}
-        />
+        {active && (
+          <Webcam
+            ref={webcamRef}
+            audio={false}
+            videoConstraints={videoConstraints}
+            onUserMedia={() => setError(null)}
+            onUserMediaError={(e) => setError((e as Error).message ?? 'camera error')}
+            mirrored={false}
+            forceScreenshotSourceSize
+            style={{
+              width: '100%',
+              borderRadius: 8,
+              background: '#000',
+              aspectRatio: '16 / 9',
+              objectFit: 'cover',
+              zIndex: 1,
+            }}
+          />
+        )}
+        {active && (
+          <div
+            style={{
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 24,
+              height: 24,
+              borderRadius: '50%',
+              border: '2px solid #fff',
+              boxShadow: '0 0 0 2px rgba(0,0,0,0.5)',
+              pointerEvents: 'none',
+            }}
+          />
+        )}
       </div>
 
       <canvas ref={canvasRef} style={{ display: 'none' }} />

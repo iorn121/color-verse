@@ -15,7 +15,7 @@ module.exports = {
       env: { node: true, browser: false },
     },
   ],
-  plugins: ['@typescript-eslint', 'react', 'react-hooks', 'import'],
+  plugins: ['@typescript-eslint', 'react', 'react-hooks', 'import', 'simple-import-sort'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -35,7 +35,11 @@ module.exports = {
       'error',
       { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
     ],
-    'import/order': ['warn', { 'newlines-between': 'always', alphabetize: { order: 'asc' } }],
+    // 自動で import を並び替え
+    'simple-import-sort/imports': 'error',
+    'simple-import-sort/exports': 'error',
+    // 競合を避けるため import/order は無効化
+    'import/order': 'off',
   },
   ignorePatterns: ['dist/', 'dev-dist/', 'node_modules/'],
 };

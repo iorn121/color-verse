@@ -1,6 +1,7 @@
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 
 import RootLayout from './layouts/RootLayout';
+import CameraPage from './pages/CameraPage';
 import ConvertPage from './pages/ConvertPage';
 import HomePage from './pages/HomePage';
 import ImageAdjustPage from './pages/ImageAdjustPage';
@@ -15,6 +16,7 @@ export const router = createBrowserRouter(
       <Route path="convert" element={<ConvertPage />} />
       <Route path="theory" element={<TheoryPage />} />
       <Route path="image" element={<ImageAdjustPage />} />
+      <Route path="camera" element={<CameraPage />} />
     </Route>,
   ),
   { basename: import.meta.env.BASE_URL },

@@ -4,7 +4,7 @@ export default function HomePage() {
   return (
     <div className="animate-fade-in">
       <h1 className="gradient-text">ColorVerse</h1>
-      <p>色の学習・ツール・分析を一体化したプラットフォーム。まずは MVP 機能から。</p>
+      <p style={{ margin: 0 }}>色の学習・ツール・分析を一体化したプラットフォーム</p>
       <ul style={{ display: 'grid', gap: 8 }}>
         <li>
           <Link to="/picker">カラーピッカー</Link>
@@ -17,6 +17,9 @@ export default function HomePage() {
         </li>
         <li>
           <Link to="/image">画像の色調補正（明度・彩度・コントラスト）</Link>
+        </li>
+        <li>
+          <Link to="/camera">カメラ連携色ピッカー</Link>
         </li>
       </ul>
     </div>

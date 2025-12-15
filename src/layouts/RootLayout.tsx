@@ -110,6 +110,15 @@ export default function RootLayout() {
                       >
                         Image
                       </NavLink>
+                    <NavLink
+                      to="/camera"
+                      style={({ isActive }) => ({
+                        color: isActive ? 'var(--color-primary)' : 'var(--color-text-primary)',
+                      })}
+                      onClick={closeMenu}
+                    >
+                      Camera
+                    </NavLink>
                     </nav>
                   </motion.div>
                 )}

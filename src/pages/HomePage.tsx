@@ -21,6 +21,9 @@ export default function HomePage() {
         <li>
           <Link to="/camera">カメラ連携色ピッカー</Link>
         </li>
+        <li>
+          <Link to="/color-quiz">JIS慣用色クイズ</Link>
+        </li>
       </ul>
     </div>
   );

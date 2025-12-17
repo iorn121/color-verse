@@ -119,6 +119,15 @@ export default function RootLayout() {
                       >
                         Camera
                       </NavLink>
+                      <NavLink
+                        to="/color-quiz"
+                        style={({ isActive }) => ({
+                          color: isActive ? 'var(--color-primary)' : 'var(--color-text-primary)',
+                        })}
+                        onClick={closeMenu}
+                      >
+                        JIS慣用色クイズ
+                      </NavLink>
                     </nav>
                   </motion.div>
                 )}

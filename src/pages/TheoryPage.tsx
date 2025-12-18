@@ -1,5 +1,5 @@
-import PageTitle from '../components/common/PageTitle';
 import Description from '../components/common/Description';
+import PageTitle from '../components/common/PageTitle';
 
 export default function TheoryPage() {
   return (

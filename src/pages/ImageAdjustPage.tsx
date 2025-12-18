@@ -1,6 +1,6 @@
-import ImageAdjuster from '../components/ImageAdjuster';
-import PageTitle from '../components/common/PageTitle';
 import Description from '../components/common/Description';
+import PageTitle from '../components/common/PageTitle';
+import ImageAdjuster from '../components/ImageAdjuster';
 
 export default function ImageAdjustPage() {
   return (

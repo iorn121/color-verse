@@ -112,4 +112,3 @@ export function getRandomInt(maxExclusive: number): number {
 export function pickRandom<T>(arr: T[], count: number): T[] {
   return JisColorModel.pickRandom(arr, count);
 }
-

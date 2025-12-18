@@ -1,6 +1,7 @@
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 
 import RootLayout from './layouts/RootLayout';
+import { JisColorModel } from './lib/jisColors';
 import CameraPage from './pages/CameraPage';
 import ColorQuizPage from './pages/ColorQuizPage';
 import ConvertPage from './pages/ConvertPage';
@@ -18,7 +19,7 @@ export const router = createBrowserRouter(
       <Route path="theory" element={<TheoryPage />} />
       <Route path="image" element={<ImageAdjustPage />} />
       <Route path="camera" element={<CameraPage />} />
-      <Route path="color-quiz" element={<ColorQuizPage />} />
+      <Route path="color-quiz" element={<ColorQuizPage />} loader={() => JisColorModel.loadAll()} />
     </Route>,
   ),
   { basename: import.meta.env.BASE_URL },

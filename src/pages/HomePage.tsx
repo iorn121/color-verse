@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom';
 
+import Description from '../components/common/Description';
+import MainTitle from '../components/common/MainTitle';
+
 export default function HomePage() {
   return (
     <div className="animate-fade-in">
-      <h1 className="gradient-text">ColorVerse</h1>
-      <p style={{ margin: 0 }}>色の学習・ツール・分析を一体化したプラットフォーム</p>
+      <MainTitle title="ColorVerse" />
+      <Description>色の学習・ツール・分析を一体化したプラットフォーム</Description>
       <ul style={{ display: 'grid', gap: 8 }}>
         <li>
           <Link to="/picker">カラーピッカー</Link>

@@ -1,7 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useLoaderData } from 'react-router-dom';
 
+import Description from '../components/common/Description';
+import JisColorLabel from '../components/common/JisColorLabel';
+import PageTitle from '../components/common/PageTitle';
 import type { JisColor } from '../lib/jisColors';
-import { getRandomInt, loadJisColors, pickRandom } from '../lib/jisColors';
+import { getRandomInt, pickRandom } from '../lib/jisColors';
 
 type Mode = 'name-to-color' | 'color-to-name';
 
@@ -28,60 +32,42 @@ function buildQuestion(colors: JisColor[], mode: Mode): Question {
 
 export default function ColorQuizPage() {
   const [mode, setMode] = useState<Mode>('name-to-color');
-  const [allColors, setAllColors] = useState<JisColor[] | null>(null);
-  const [question, setQuestion] = useState<Question | null>(null);
-  const [selected, setSelected] = useState<string | null>(null); // hex or nameではなく識別用にhex+name連結
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const allColors = useLoaderData() as JisColor[];
+  const [selected, setSelected] = useState<string | null>(null); // hex|name
+  const [turn, setTurn] = useState(0); // 出題更新用のシード
 
-  useEffect(() => {
-    const ac = new AbortController();
-    loadJisColors(ac.signal)
-      .then((data) => {
-        const filtered = data.filter((d) => /^#[0-9A-F]{6}$/.test(d.hex));
-        setAllColors(filtered);
-      })
-      .catch((e) => {
-        // React 18 StrictModeの開発時ダブルマウントでAbortErrorが発生する場合がある
-        if (e instanceof DOMException && e.name === 'AbortError') return;
-        console.error(e);
-        setAllColors([]);
-      });
-    return () => ac.abort();
-  }, []);
-
-  useEffect(() => {
-    if (!allColors || allColors.length < 4) return;
-    setQuestion(buildQuestion(allColors, mode));
-    setSelected(null);
-    setIsCorrect(null);
-  }, [allColors, mode]);
-
-  const title = useMemo(
-    () => (mode === 'name-to-color' ? '色名 → 色（4択）' : '色 → 色名（4択）'),
-    [mode],
+  const colors = useMemo(
+    () => (Array.isArray(allColors) ? allColors.filter((d) => /^#[0-9A-F]{6}$/.test(d.hex)) : []),
+    [allColors],
   );
 
+  const question = useMemo<Question | null>(() => {
+    // turn は再出題トリガーとして使用
+    void turn;
+    if (!colors || colors.length < 4) return null;
+    return buildQuestion(colors, mode);
+  }, [colors, mode, turn]);
+
   const handleAnswer = (opt: JisColor) => {
-    if (!question) return;
-    if (selected) return; // 一問一答
-    const correct = opt.hex === question.correct.hex && opt.name === question.correct.name;
+    if (!question || selected) return;
     setSelected(`${opt.hex}|${opt.name}`);
-    setIsCorrect(correct);
   };
 
   const next = () => {
-    if (!allColors) return;
-    setQuestion(buildQuestion(allColors, mode));
     setSelected(null);
-    setIsCorrect(null);
+    setTurn((t) => t + 1);
   };
+
+  const isCorrect = useMemo(() => {
+    if (!question || !selected) return null;
+    const [hex, name] = selected.split('|');
+    return hex === question.correct.hex && name === question.correct.name;
+  }, [question, selected]);
 
   return (
     <div className="container animate-fade-in" style={{ display: 'grid', gap: 16 }}>
-      <h1 className="gradient-text" style={{ marginBottom: 0 }}>
-        JIS慣用色クイズ
-      </h1>
-      <p style={{ marginTop: 0 }}>モードを選んでクイズに挑戦しましょう。</p>
+      <PageTitle title="JIS慣用色クイズ" />
+      <Description>モードを選んでクイズに挑戦しましょう。</Description>
 
       <div className="flex items-center gap-sm" role="tablist" aria-label="クイズモード">
         <button
@@ -89,10 +75,20 @@ export default function ColorQuizPage() {
           aria-selected={mode === 'name-to-color'}
           className="btn"
           style={{
-            background: mode === 'name-to-color' ? 'var(--color-primary-ghost)' : 'transparent',
-            border: '1px solid var(--color-border)',
+            background:
+              mode === 'name-to-color'
+                ? 'var(--color-background-tertiary)'
+                : 'var(--color-background)',
+            border:
+              mode === 'name-to-color'
+                ? '1px solid var(--color-border-hover)'
+                : '1px solid var(--color-border)',
           }}
-          onClick={() => setMode('name-to-color')}
+          onClick={() => {
+            setMode('name-to-color');
+            setSelected(null);
+            setTurn((t) => t + 1);
+          }}
         >
           色名 → 色
         </button>
@@ -101,24 +97,33 @@ export default function ColorQuizPage() {
           aria-selected={mode === 'color-to-name'}
           className="btn"
           style={{
-            background: mode === 'color-to-name' ? 'var(--color-primary-ghost)' : 'transparent',
-            border: '1px solid var(--color-border)',
+            background:
+              mode === 'color-to-name'
+                ? 'var(--color-background-tertiary)'
+                : 'var(--color-background)',
+            border:
+              mode === 'color-to-name'
+                ? '1px solid var(--color-border-hover)'
+                : '1px solid var(--color-border)',
           }}
-          onClick={() => setMode('color-to-name')}
+          onClick={() => {
+            setMode('color-to-name');
+            setSelected(null);
+            setTurn((t) => t + 1);
+          }}
         >
           色 → 色名
         </button>
       </div>
 
       <section aria-live="polite" style={{ display: 'grid', gap: 12 }}>
-        <h2 style={{ margin: 0, fontSize: 18 }}>{title}</h2>
         {!question && <p>読み込み中…</p>}
 
         {question && (
           <div style={{ display: 'grid', gap: 12 }}>
             {question.mode === 'name-to-color' ? (
               <div style={{ display: 'grid', gap: 8 }}>
-                <div style={{ fontWeight: 700, fontSize: 18 }}>{question.correct.name}</div>
+                <JisColorLabel color={question.correct} />
                 <div
                   style={{
                     display: 'grid',
@@ -134,10 +139,13 @@ export default function ColorQuizPage() {
                       style={{
                         padding: 0,
                         height: 96,
-                        border:
-                          selected && `${opt.hex}|${opt.name}` === selected
-                            ? `2px solid ${isCorrect ? 'var(--color-success)' : 'var(--color-danger)'}`
-                            : '1px solid var(--color-border)',
+                        border: selected
+                          ? opt.hex === question.correct.hex && opt.name === question.correct.name
+                            ? '2px solid var(--color-success)'
+                            : `${opt.hex}|${opt.name}` === selected
+                              ? '2px solid var(--color-danger)'
+                              : '1px solid var(--color-border)'
+                          : '1px solid var(--color-border)',
                         overflow: 'hidden',
                       }}
                       aria-pressed={selected ? `${opt.hex}|${opt.name}` === selected : undefined}
@@ -174,15 +182,17 @@ export default function ColorQuizPage() {
                       style={{
                         padding: 12,
                         textAlign: 'left',
-                        border:
-                          selected && `${opt.hex}|${opt.name}` === selected
-                            ? `2px solid ${isCorrect ? 'var(--color-success)' : 'var(--color-danger)'}`
-                            : '1px solid var(--color-border)',
+                        border: selected
+                          ? opt.hex === question.correct.hex && opt.name === question.correct.name
+                            ? '2px solid var(--color-success)'
+                            : `${opt.hex}|${opt.name}` === selected
+                              ? '2px solid var(--color-danger)'
+                              : '1px solid var(--color-border)'
+                          : '1px solid var(--color-border)',
                       }}
                       aria-pressed={selected ? `${opt.hex}|${opt.name}` === selected : undefined}
                     >
-                      <div style={{ fontWeight: 600 }}>{opt.name}</div>
-                      <div style={{ opacity: 0.7, fontFamily: 'monospace' }}>{opt.hex}</div>
+                      <JisColorLabel color={opt} />
                     </button>
                   ))}
                 </div>

@@ -1,11 +1,10 @@
 import ColorPicker from '../components/ColorPicker';
+import PageTitle from '../components/common/PageTitle';
 
 export default function PickerPage() {
   return (
     <div style={{ display: 'grid', gap: 12 }}>
-      <h2 style={{ margin: 0 }} className="secondary-gradient-text">
-        カラーピッカー
-      </h2>
+      <PageTitle title="カラーピッカー" />
       <ColorPicker />
     </div>
   );

@@ -3,6 +3,8 @@ import { createBrowserRouter, createRoutesFromElements, Route } from 'react-rout
 import RootLayout from './layouts/RootLayout';
 import { JisColorModel } from './lib/jisColors';
 import CameraPage from './pages/CameraPage';
+import ColorCatalogPage from './pages/ColorCatalogPage';
+import ColorDetailPage from './pages/ColorDetailPage';
 import ColorQuizPage from './pages/ColorQuizPage';
 import ConvertPage from './pages/ConvertPage';
 import HomePage from './pages/HomePage';
@@ -20,6 +22,16 @@ export const router = createBrowserRouter(
       <Route path="image" element={<ImageAdjustPage />} />
       <Route path="camera" element={<CameraPage />} />
       <Route path="color-quiz" element={<ColorQuizPage />} loader={() => JisColorModel.loadAll()} />
+      <Route path="colors" element={<ColorCatalogPage />} loader={() => JisColorModel.loadAll()} />
+      <Route
+        path="colors/:id"
+        element={<ColorDetailPage />}
+        loader={async ({ params }) => {
+          const colors = await JisColorModel.loadAll();
+          const id = params.id ?? '';
+          return colors.find((c) => JisColorModel.makeId(c) === id) || null;
+        }}
+      />
     </Route>,
   ),
   { basename: import.meta.env.BASE_URL },

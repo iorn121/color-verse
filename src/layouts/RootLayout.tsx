@@ -128,6 +128,15 @@ export default function RootLayout() {
                       >
                         JIS慣用色クイズ
                       </NavLink>
+                      <NavLink
+                        to="/colors"
+                        style={({ isActive }) => ({
+                          color: isActive ? 'var(--color-primary)' : 'var(--color-text-primary)',
+                        })}
+                        onClick={closeMenu}
+                      >
+                        色図鑑
+                      </NavLink>
                     </nav>
                   </motion.div>
                 )}

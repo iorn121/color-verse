@@ -27,6 +27,9 @@ export default function HomePage() {
         <li>
           <Link to="/color-quiz">JIS慣用色クイズ</Link>
         </li>
+        <li>
+          <Link to="/colors">色図鑑</Link>
+        </li>
       </ul>
     </div>
   );

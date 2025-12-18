@@ -209,11 +209,6 @@ export default function ColorQuizPage() {
                 >
                   {isCorrect ? '正解！' : '不正解'}
                 </span>
-                {!isCorrect && (
-                  <span>
-                    正解は「{question.correct.name}」（{question.correct.hex}）
-                  </span>
-                )}
               </div>
             )}
 

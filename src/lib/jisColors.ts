@@ -1,7 +1,10 @@
 export interface JisColor {
   readonly name: string;
+  readonly reading?: string; // 慣用色名の読み
   readonly hex: string; // #RRGGBB
   readonly group: string; // 和色名 / 外来色名 など
+  readonly munsell?: string; // マンセル値
+  readonly systemName?: string; // 系統色名
   readonly h?: number;
   readonly s?: number;
   readonly b?: number;
@@ -27,7 +30,7 @@ export const JisColorModel = {
   /**
    * CSV全体テキストをパース。
    * フォーマット（更新後ヘッダー）:
-   * カラーコード,慣用色名,マンセル値,系統色名,H,S,B,分類
+   * カラーコード,慣用色名,読み,マンセル値,系統色名,H,S,B,分類
    */
   parseCsv(text: string): JisColor[] {
     const lines = text.split(/\r?\n/);
@@ -48,22 +51,26 @@ export const JisColorModel = {
    * 1レコードをオブジェクトに変換。無効行はnull。
    */
   parseRow(cols: string[]): JisColor | null {
-    if (!cols || cols.length < 8) return null;
+    if (!cols || cols.length < 9) return null;
     const hex = this.normalizeHex(cols[0]);
     const name = (cols[1] || '').trim();
-    // cols[2] = マンセル値（未使用）
-    // cols[3] = 系統色名（未使用）
-    const h = Number(cols[4]);
-    const s = Number(cols[5]);
-    const b = Number(cols[6]);
-    const group = (cols[7] || '').trim(); // 分類（和色名 / 外来色名）
+    const reading = (cols[2] || '').trim() || undefined;
+    const munsell = (cols[3] || '').trim() || undefined;
+    const systemName = (cols[4] || '').trim() || undefined;
+    const h = Number(cols[5]);
+    const s = Number(cols[6]);
+    const b = Number(cols[7]);
+    const group = (cols[8] || '').trim(); // 分類（和色名 / 外来色名）
 
     if (!this.isValidHex(hex) || !name) return null;
 
     return {
       name,
+      reading,
       hex,
       group,
+      munsell,
+      systemName,
       h: Number.isFinite(h) ? h : undefined,
       s: Number.isFinite(s) ? s : undefined,
       b: Number.isFinite(b) ? b : undefined,
@@ -99,6 +106,22 @@ export const JisColorModel = {
       copy.splice(idx, 1);
     }
     return out;
+  },
+
+  /**
+   * 安定した短いID（base36）を生成（hexとnameに依存）
+   * - 同じ（hex,name）は常に同じID
+   * - 異なる組み合わせは高確率で異なるID
+   */
+  makeId(color: Pick<JisColor, 'hex' | 'name'>): string {
+    const key = `${color.hex}|${color.name}`;
+    // djb2
+    let hash = 5381;
+    for (let i = 0; i < key.length; i += 1) {
+      hash = (hash << 5) + hash + key.charCodeAt(i);
+      hash |= 0; // 32-bit
+    }
+    return (hash >>> 0).toString(36);
   },
 } as const;
 

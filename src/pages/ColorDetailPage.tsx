@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Link, useLoaderData } from 'react-router-dom';
 
+import ColorSwatch from '../components/common/ColorSwatch';
 import Description from '../components/common/Description';
 import JisColorLabel from '../components/common/JisColorLabel';
 import PageTitle from '../components/common/PageTitle';
@@ -57,16 +58,7 @@ export default function ColorDetailPage() {
         >
           <div className="card" style={{ padding: 12 }}>
             <div style={{ fontWeight: 700, marginBottom: 8 }}>プレビュー</div>
-            <div
-              aria-hidden
-              style={{
-                width: '100%',
-                height: 160,
-                borderRadius: 8,
-                background: color.hex,
-                border: '1px solid var(--color-border)',
-              }}
-            />
+            <ColorSwatch color={color.hex} height={160} />
           </div>
 
           <div className="card" style={{ padding: 12 }}>
@@ -106,16 +98,7 @@ export default function ColorDetailPage() {
             <div style={{ fontWeight: 700, marginBottom: 8 }}>補色</div>
             {complementary ? (
               <div style={{ display: 'grid', gap: 8 }}>
-                <div
-                  aria-hidden
-                  style={{
-                    width: '100%',
-                    height: 84,
-                    borderRadius: 8,
-                    background: complementary,
-                    border: '1px solid var(--color-border)',
-                  }}
-                />
+                <ColorSwatch color={complementary} />
                 <div style={{ fontFamily: 'monospace' }}>{complementary}</div>
               </div>
             ) : (

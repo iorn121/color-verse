@@ -8,7 +8,7 @@ export default function HomePage() {
     <div className="animate-fade-in">
       <MainTitle title="ColorVerse" />
       <Description>色の学習・ツール・分析を一体化したプラットフォーム</Description>
-      <ul style={{ display: 'grid', gap: 8 }}>
+      <ul className="list-disc list-inside" style={{ display: 'grid', gap: 8, marginTop: 16 }}>
         <li>
           <Link to="/picker">カラーピッカー</Link>
         </li>

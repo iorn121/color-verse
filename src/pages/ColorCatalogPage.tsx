@@ -1,50 +1,17 @@
-import { useMemo, useState } from 'react';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 
+import ColorSwatch from '../components/common/ColorSwatch';
 import Description from '../components/common/Description';
 import JisColorLabel from '../components/common/JisColorLabel';
 import PageTitle from '../components/common/PageTitle';
+import { GroupFilter, useColorSearch } from '../hooks/useColorSearch';
 import type { JisColor } from '../lib/jisColors';
 import { JisColorModel } from '../lib/jisColors';
-
-function toHiragana(input: string): string {
-  let out = '';
-  for (let i = 0; i < input.length; i += 1) {
-    const code = input.charCodeAt(i);
-    if (code >= 0x30a1 && code <= 0x30f6) {
-      out += String.fromCharCode(code - 0x60);
-    } else {
-      out += input[i];
-    }
-  }
-  return out;
-}
-
-// 詳細ページで補色を計算するため、ここでは未使用
-
-type GroupFilter = 'all' | '和色名' | '外来色名';
 
 export default function ColorCatalogPage() {
   const allColors = useLoaderData() as JisColor[];
   const navigate = useNavigate();
-  const [query, setQuery] = useState('');
-  const [group, setGroup] = useState<GroupFilter>('all');
-  // 選択は詳細ページへ遷移するため未使用
-
-  const colors = useMemo(() => {
-    const list = Array.isArray(allColors) ? allColors : [];
-    const q = query.trim();
-    const qUpper = q.toUpperCase();
-    const qHira = toHiragana(q);
-    return list.filter((c) => {
-      if (group !== 'all' && c.group !== group) return false;
-      if (!q) return true;
-      const nameHit = c.name.includes(q) || toHiragana(c.name).includes(qHira);
-      const hexHit = c.hex.toUpperCase().includes(qUpper);
-      const readingHit = c.reading ? toHiragana(c.reading).includes(qHira) : false;
-      return nameHit || hexHit || readingHit;
-    });
-  }, [allColors, query, group]);
+  const { filtered: colors, total, query, setQuery, group, setGroup } = useColorSearch(allColors);
 
   return (
     <div className="container animate-fade-in" style={{ display: 'grid', gap: 16 }}>
@@ -73,7 +40,7 @@ export default function ColorCatalogPage() {
           </select>
         </div>
         <div style={{ opacity: 0.7, fontSize: 12 }}>
-          該当件数: {colors.length} / {Array.isArray(allColors) ? allColors.length : 0}
+          該当件数: {colors.length} / {total}
         </div>
       </div>
 
@@ -99,16 +66,7 @@ export default function ColorCatalogPage() {
               }}
               aria-pressed={undefined}
             >
-              <div
-                aria-hidden
-                style={{
-                  width: '100%',
-                  height: 84,
-                  borderRadius: 8,
-                  background: c.hex,
-                  border: '1px solid var(--color-border)',
-                }}
-              />
+              <ColorSwatch color={c.hex} />
               <JisColorLabel color={c} />
               <div style={{ opacity: 0.7, fontSize: 12 }}>{c.group}</div>
             </button>

@@ -95,3 +95,13 @@ export function hslToRgb({ h, s, l }: Hsl): Rgb {
     b: Math.round((b1 + m) * 255),
   };
 }
+
+export function formatRgb(value: Rgb | null, invalidLabel = 'invalid'): string {
+  if (!value) return invalidLabel;
+  return `rgb(${value.r}, ${value.g}, ${value.b})`;
+}
+
+export function formatHsl(value: Hsl | null, invalidLabel = 'invalid'): string {
+  if (!value) return invalidLabel;
+  return `hsl(${value.h}, ${value.s}%, ${value.l}%)`;
+}

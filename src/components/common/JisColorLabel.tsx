@@ -1,5 +1,7 @@
 import type { CSSProperties } from 'react';
 
+import ColorSwatch from './ColorSwatch';
+
 type BasicColor = {
   name: string;
   hex: string; // #RRGGBB
@@ -26,18 +28,7 @@ export default function JisColorLabel({
 
   return (
     <div style={container}>
-      {showSwatch && (
-        <span
-          aria-hidden
-          style={{
-            width: 14,
-            height: 14,
-            borderRadius: 3,
-            background: color.hex,
-            border: '1px solid var(--color-border)',
-          }}
-        />
-      )}
+      {showSwatch && <ColorSwatch color={color.hex} width={14} height={14} radius={3} />}
       <span style={{ display: 'grid', gap: 2, textAlign: 'left' }}>
         <span style={{ fontWeight: 600 }}>{color.name}</span>
         <span style={{ opacity: 0.7, fontFamily: 'monospace' }}>{color.hex}</span>

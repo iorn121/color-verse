@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export interface JisColor {
   readonly name: string;
   readonly reading?: string; // 慣用色名の読み
@@ -9,6 +11,35 @@ export interface JisColor {
   readonly s?: number;
   readonly b?: number;
 }
+
+const HexColorSchema = z
+  .string()
+  .regex(/^#[0-9A-Fa-f]{6}$/)
+  .transform((s: string) => s.trim().toUpperCase());
+
+const OptionalNonEmptyString = z
+  .string()
+  .transform((s) => (s || '').trim())
+  .transform((s) => (s.length ? s : undefined))
+  .optional();
+
+const JisColorSchema = z.object({
+  name: z
+    .string()
+    .transform((s) => (s || '').trim())
+    .refine((s) => s.length > 0, 'name required'),
+  reading: OptionalNonEmptyString,
+  hex: HexColorSchema,
+  group: z
+    .string()
+    .transform((s) => (s || '').trim())
+    .refine((s) => s.length > 0, 'group required'),
+  munsell: OptionalNonEmptyString,
+  systemName: OptionalNonEmptyString,
+  h: z.number().int().min(0).max(360).optional(),
+  s: z.number().int().min(0).max(100).optional(),
+  b: z.number().int().min(0).max(100).optional(),
+});
 
 /**
  * JIS慣用色データのモデル。
@@ -62,19 +93,24 @@ export const JisColorModel = {
     const b = Number(cols[7]);
     const group = (cols[8] || '').trim(); // 分類（和色名 / 外来色名）
 
-    if (!this.isValidHex(hex) || !name) return null;
-
-    return {
+    const candidate = {
       name,
       reading,
       hex,
       group,
       munsell,
       systemName,
-      h: Number.isFinite(h) ? h : undefined,
-      s: Number.isFinite(s) ? s : undefined,
-      b: Number.isFinite(b) ? b : undefined,
+      h: Number.isFinite(h) ? Math.round(h) : undefined,
+      s: Number.isFinite(s) ? Math.round(s) : undefined,
+      b: Number.isFinite(b) ? Math.round(b) : undefined,
     };
+    const parsed = JisColorSchema.safeParse(candidate);
+    if (!parsed.success) {
+      // eslint-disable-next-line no-console
+      console.warn('Invalid JIS color row skipped:', { candidate, issues: parsed.error.issues });
+      return null;
+    }
+    return parsed.data;
   },
 
   /**

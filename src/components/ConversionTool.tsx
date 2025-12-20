@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 
-import { hexToRgb, Hsl, hslToRgb, Rgb, rgbToHex, rgbToHsl } from '../lib/color';
+import type { Hsl, Rgb } from '../lib/color';
+import { formatHsl, formatRgb, hexToRgb, hslToRgb, rgbToHex, rgbToHsl } from '../lib/color';
+import ColorSwatch from './common/ColorSwatch';
 
 export default function ConversionTool() {
   const [hex, setHex] = useState('#0EA5E9');
@@ -29,14 +31,7 @@ export default function ConversionTool() {
               width: 160,
             }}
           />
-          <div
-            style={{
-              width: 24,
-              height: 24,
-              border: '1px solid #e5e7eb',
-              background: hex,
-            }}
-          />
+          <ColorSwatch color={hex} width={24} height={24} radius={4} />
         </div>
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <div
@@ -46,7 +41,7 @@ export default function ConversionTool() {
               borderRadius: 6,
             }}
           >
-            {rgb ? `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})` : 'invalid'}
+            {formatRgb(rgb)}
           </div>
           <div
             style={{
@@ -55,7 +50,7 @@ export default function ConversionTool() {
               borderRadius: 6,
             }}
           >
-            {hsl ? `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)` : 'invalid'}
+            {formatHsl(hsl)}
           </div>
         </div>
       </section>
@@ -87,14 +82,7 @@ export default function ConversionTool() {
             onChange={(e) => setB(Number(e.target.value))}
             style={{ width: 80 }}
           />
-          <div
-            style={{
-              width: 24,
-              height: 24,
-              border: '1px solid #e5e7eb',
-              background: rgbHex,
-            }}
-          />
+          <ColorSwatch color={rgbHex} width={24} height={24} radius={4} />
         </div>
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <div
@@ -112,7 +100,9 @@ export default function ConversionTool() {
               border: '1px solid #e5e7eb',
               borderRadius: 6,
             }}
-          >{`hsl(${rgbHsl.h}, ${rgbHsl.s}%, ${rgbHsl.l}%)`}</div>
+          >
+            {formatHsl(rgbHsl)}
+          </div>
         </div>
       </section>
 
@@ -143,14 +133,7 @@ export default function ConversionTool() {
             onChange={(e) => setHslVal({ ...hslVal, l: Number(e.target.value) })}
             style={{ width: 80 }}
           />
-          <div
-            style={{
-              width: 24,
-              height: 24,
-              border: '1px solid #e5e7eb',
-              background: hslHex,
-            }}
-          />
+          <ColorSwatch color={hslHex} width={24} height={24} radius={4} />
         </div>
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <div
@@ -168,7 +151,9 @@ export default function ConversionTool() {
               border: '1px solid #e5e7eb',
               borderRadius: 6,
             }}
-          >{`hsl(${hslVal.h}, ${hslVal.s}%, ${hslVal.l}%)`}</div>
+          >
+            {formatHsl(hslVal)}
+          </div>
         </div>
       </section>
     </div>

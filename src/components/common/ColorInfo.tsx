@@ -1,4 +1,6 @@
 import type { Hsl, Rgb } from '../../lib/color';
+import { formatHsl, formatRgb } from '../../lib/color';
+import ColorSwatch from './ColorSwatch';
 
 type ColorInfoProps = {
   title?: string;
@@ -12,24 +14,17 @@ export default function ColorInfo({ title, hex, rgb, hsl }: ColorInfoProps) {
     <div className="card" style={{ display: 'grid', gap: 8, maxWidth: 640 }}>
       {title && <div style={{ fontWeight: 700 }}>{title}</div>}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <div
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: 8,
-            border: '1px solid var(--color-border)',
-            background: hex ?? '#000',
-          }}
-        />
+        <ColorSwatch color={hex ?? '#000'} width={40} height={40} radius={8} />
         <div style={{ display: 'grid', gap: 4 }}>
           <div>
             Hex: <code>{hex ?? '-'}</code>
           </div>
           <div>
-            RGB: <code>{rgb ? `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})` : '-'}</code>
+            RGB:
+            <code>{formatRgb(rgb)}</code>
           </div>
           <div>
-            HSL: <code>{hsl ? `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)` : '-'}</code>
+            HSL: <code>{formatHsl(hsl, '-')}</code>
           </div>
         </div>
       </div>

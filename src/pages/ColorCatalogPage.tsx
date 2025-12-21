@@ -2,6 +2,8 @@ import { useLoaderData, useNavigate } from 'react-router-dom';
 
 import ColorSwatch from '../components/common/ColorSwatch';
 import Description from '../components/common/Description';
+import FavoriteButton from '../components/common/FavoriteButton';
+import HomeLink from '../components/common/HomeLink';
 import JisColorLabel from '../components/common/JisColorLabel';
 import PageTitle from '../components/common/PageTitle';
 import { GroupFilter, useColorSearch } from '../hooks/useColorSearch';
@@ -63,9 +65,13 @@ export default function ColorCatalogPage() {
                 textAlign: 'left',
                 padding: 12,
                 border: '1px solid var(--color-border)',
+                position: 'relative',
               }}
               aria-pressed={undefined}
             >
+              <div style={{ position: 'absolute', top: 8, right: 8 }}>
+                <FavoriteButton hex={c.hex} />
+              </div>
               <ColorSwatch color={c.hex} />
               <JisColorLabel color={c} />
               <div style={{ opacity: 0.7, fontSize: 12 }}>{c.group}</div>
@@ -75,6 +81,7 @@ export default function ColorCatalogPage() {
 
         {/* 詳細は /colors/:id に遷移して表示 */}
       </section>
+      <HomeLink fixed />
     </div>
   );
 }

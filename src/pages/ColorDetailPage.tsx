@@ -3,6 +3,8 @@ import { Link, useLoaderData } from 'react-router-dom';
 
 import ColorSwatch from '../components/common/ColorSwatch';
 import Description from '../components/common/Description';
+import FavoriteButton from '../components/common/FavoriteButton';
+import HomeLink from '../components/common/HomeLink';
 import JisColorLabel from '../components/common/JisColorLabel';
 import PageTitle from '../components/common/PageTitle';
 import { hexToRgb, hslToRgb, rgbToHex, rgbToHsl } from '../lib/color';
@@ -41,7 +43,10 @@ export default function ColorDetailPage() {
       <div className="card" style={{ padding: 16, display: 'grid', gap: 12 }}>
         <div className="flex items-center justify-between">
           <JisColorLabel color={color} showSwatch />
-          <div style={{ opacity: 0.7, fontSize: 12 }}>{color.group}</div>
+          <div className="flex items-center" style={{ gap: 8 }}>
+            <div style={{ opacity: 0.7, fontSize: 12 }}>{color.group}</div>
+            <FavoriteButton hex={color.hex} />
+          </div>
         </div>
         {color.reading && (
           <div style={{ opacity: 0.9 }}>
@@ -108,10 +113,11 @@ export default function ColorDetailPage() {
         </div>
       </div>
 
-      <div>
+      <div className="flex items-center" style={{ gap: 8 }}>
         <Link to="/colors" className="btn">
           図鑑へ戻る
         </Link>
+        <HomeLink fixed />
       </div>
     </div>
   );

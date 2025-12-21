@@ -30,6 +30,9 @@ export default function HomePage() {
         <li>
           <Link to="/colors">色図鑑</Link>
         </li>
+        <li>
+          <Link to="/me">マイページ</Link>
+        </li>
       </ul>
     </div>
   );

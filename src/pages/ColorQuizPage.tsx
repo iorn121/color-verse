@@ -3,6 +3,7 @@ import { useLoaderData } from 'react-router-dom';
 
 import ColorSwatch from '../components/common/ColorSwatch';
 import Description from '../components/common/Description';
+import HomeLink from '../components/common/HomeLink';
 import JisColorLabel from '../components/common/JisColorLabel';
 import PageTitle from '../components/common/PageTitle';
 import QuizModeTabs from '../components/common/QuizModeTabs';
@@ -142,6 +143,7 @@ export default function ColorQuizPage() {
           </div>
         )}
       </section>
+      <HomeLink fixed />
     </div>
   );
 }

@@ -9,6 +9,7 @@ import ColorQuizPage from './pages/ColorQuizPage';
 import ConvertPage from './pages/ConvertPage';
 import HomePage from './pages/HomePage';
 import ImageAdjustPage from './pages/ImageAdjustPage';
+import MyPage from './pages/MyPage';
 import PickerPage from './pages/PickerPage';
 import TheoryPage from './pages/TheoryPage';
 
@@ -23,6 +24,7 @@ export const router = createBrowserRouter(
       <Route path="camera" element={<CameraPage />} />
       <Route path="color-quiz" element={<ColorQuizPage />} loader={() => JisColorModel.loadAll()} />
       <Route path="colors" element={<ColorCatalogPage />} loader={() => JisColorModel.loadAll()} />
+      <Route path="me" element={<MyPage />} loader={() => JisColorModel.loadAll()} />
       <Route
         path="colors/:id"
         element={<ColorDetailPage />}

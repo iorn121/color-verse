@@ -137,6 +137,15 @@ export default function RootLayout() {
                       >
                         色図鑑
                       </NavLink>
+                      <NavLink
+                        to="/me"
+                        style={({ isActive }) => ({
+                          color: isActive ? 'var(--color-primary)' : 'var(--color-text-primary)',
+                        })}
+                        onClick={closeMenu}
+                      >
+                        マイページ
+                      </NavLink>
                     </nav>
                   </motion.div>
                 )}

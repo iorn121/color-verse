@@ -1,4 +1,5 @@
 import Description from '../components/common/Description';
+import HomeLink from '../components/common/HomeLink';
 import PageTitle from '../components/common/PageTitle';
 
 export default function TheoryPage() {
@@ -9,6 +10,7 @@ export default function TheoryPage() {
         ここでは色相環、補色、類似色、三原色、RGB/CMYK
         の違い、色温度などの基礎を順次掲載していきます
       </Description>
+      <HomeLink fixed />
     </div>
   );
 }

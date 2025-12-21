@@ -4,6 +4,7 @@ import { useCameraSampler } from '../hooks/useCameraSampler';
 import CameraControls from './camera/CameraControls';
 import CameraPreview from './camera/CameraPreview';
 import ColorInfo from './common/ColorInfo';
+import FavoriteButton from './common/FavoriteButton';
 
 export default function CameraSampler() {
   const { webcamRef, canvasRef, state, start, stop, lock, setError, videoConstraints } =
@@ -43,12 +44,18 @@ export default function CameraSampler() {
           </small>
         </>
       ) : state.locked ? (
-        <ColorInfo
-          title="確定した色"
-          hex={state.lockedHex}
-          rgb={state.lockedRgb}
-          hsl={state.lockedHsl}
-        />
+        <div style={{ display: 'grid', gap: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ fontWeight: 700 }}>確定した色</div>
+            {state.lockedHex && <FavoriteButton hex={state.lockedHex} />}
+          </div>
+          <ColorInfo
+            title={undefined}
+            hex={state.lockedHex}
+            rgb={state.lockedRgb}
+            hsl={state.lockedHsl}
+          />
+        </div>
       ) : null}
     </div>
   );

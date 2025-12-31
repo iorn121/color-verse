@@ -5,7 +5,6 @@ type PaletteListItemProps = {
   to: string;
   title: string;
   description: string;
-  colors: string[];
 };
 
 export default function PaletteListItem({

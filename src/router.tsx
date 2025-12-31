@@ -2,6 +2,7 @@ import { createBrowserRouter, createRoutesFromElements, Route } from 'react-rout
 
 import RootLayout from './layouts/RootLayout';
 import { JisColorModel } from './lib/jisColors';
+import CameraCvdPage from './pages/CameraCvdPage';
 import CameraPage from './pages/CameraPage';
 import ColorCatalogPage from './pages/ColorCatalogPage';
 import ColorDetailPage from './pages/ColorDetailPage';
@@ -22,6 +23,7 @@ export const router = createBrowserRouter(
       <Route path="theory" element={<TheoryPage />} />
       <Route path="image" element={<ImageAdjustPage />} />
       <Route path="camera" element={<CameraPage />} />
+      <Route path="camera-cvd" element={<CameraCvdPage />} />
       <Route path="color-quiz" element={<ColorQuizPage />} loader={() => JisColorModel.loadAll()} />
       <Route path="colors" element={<ColorCatalogPage />} loader={() => JisColorModel.loadAll()} />
       <Route path="me" element={<MyPage />} loader={() => JisColorModel.loadAll()} />

@@ -1,10 +1,10 @@
-import type { Hsl, Rgb } from '../../lib/color';
+import type { Hex, Hsl, Rgb } from '../../lib/color';
 import { formatHsl, formatRgb } from '../../lib/color';
 import ColorWell from '../common/ColorWell';
 
 type ColorInputsProps = {
-  hex: string;
-  onHexChange: (next: string) => void;
+  hex: Hex;
+  onHexChange: (next: Hex) => void;
   rgb: Rgb | null;
   hsl: Hsl | null;
 };

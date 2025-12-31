@@ -7,10 +7,11 @@ import FavoriteButton from '../components/common/FavoriteButton';
 import HomeLink from '../components/common/HomeLink';
 import JisColorLabel from '../components/common/JisColorLabel';
 import PageTitle from '../components/common/PageTitle';
+import type { Hex } from '../lib/color';
 import { hexToRgb, hslToRgb, rgbToHex, rgbToHsl } from '../lib/color';
 import type { JisColor } from '../lib/jisColors';
 
-function getComplementaryHex(hex: string): string | null {
+function getComplementaryHex(hex: Hex): Hex | null {
   const rgb = hexToRgb(hex);
   if (!rgb) return null;
   const hsl = rgbToHsl(rgb);

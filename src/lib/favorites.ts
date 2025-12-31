@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import type { Hex } from './color';
+
 const HEX_REGEX = /^#[0-9A-F]{6}$/;
 const STORAGE_KEY = 'favorites.hex.v1';
 
@@ -11,15 +13,15 @@ const HexSchema = z
 const FavoritesSchema = z.array(HexSchema);
 
 export interface FavoritesStore {
-  getAll(): string[];
-  has(hex: string): boolean;
-  add(hex: string): void;
-  remove(hex: string): void;
-  toggle(hex: string): boolean;
+  getAll(): Hex[];
+  has(hex: Hex): boolean;
+  add(hex: Hex): void;
+  remove(hex: Hex): void;
+  toggle(hex: Hex): boolean;
   subscribe(listener: () => void): () => void;
 }
 
-function normalizeHex(hex: string): string {
+function normalizeHex(hex: Hex): Hex {
   return (hex || '').trim().toUpperCase();
 }
 
@@ -34,7 +36,7 @@ export class LocalFavoritesStore implements FavoritesStore {
     }
   }
 
-  private read(): string[] {
+  private read(): Hex[] {
     try {
       const raw = localStorage.getItem(this.storageKey);
       if (!raw) return [];
@@ -50,7 +52,7 @@ export class LocalFavoritesStore implements FavoritesStore {
     }
   }
 
-  private write(list: string[]): void {
+  private write(list: Hex[]): void {
     const safe = FavoritesSchema.safeParse(list);
     const data = safe.success ? safe.data : [];
     localStorage.setItem(this.storageKey, JSON.stringify(data));
@@ -67,18 +69,18 @@ export class LocalFavoritesStore implements FavoritesStore {
     });
   }
 
-  getAll(): string[] {
+  getAll(): Hex[] {
     return this.read();
   }
 
-  has(hex: string): boolean {
+  has(hex: Hex): boolean {
     const key = normalizeHex(hex);
     if (!HEX_REGEX.test(key)) return false;
     const list = this.read();
     return list.includes(key);
   }
 
-  add(hex: string): void {
+  add(hex: Hex): void {
     const key = normalizeHex(hex);
     if (!HEX_REGEX.test(key)) return;
     const list = this.read();
@@ -86,13 +88,13 @@ export class LocalFavoritesStore implements FavoritesStore {
     this.write([...list, key]);
   }
 
-  remove(hex: string): void {
+  remove(hex: Hex): void {
     const key = normalizeHex(hex);
     const next = this.read().filter((h) => h !== key);
     this.write(next);
   }
 
-  toggle(hex: string): boolean {
+  toggle(hex: Hex): boolean {
     const key = normalizeHex(hex);
     if (!HEX_REGEX.test(key)) return false;
     const list = this.read();

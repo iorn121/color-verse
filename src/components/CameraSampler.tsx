@@ -1,6 +1,5 @@
-import {} from 'react';
-
 import { useCameraSampler } from '../hooks/useCameraSampler';
+import { rgbToHex } from '../lib/color';
 import CameraControls from './camera/CameraControls';
 import CameraPreview from './camera/CameraPreview';
 import ColorInfo from './common/ColorInfo';
@@ -38,7 +37,7 @@ export default function CameraSampler() {
 
       {state.active ? (
         <>
-          <ColorInfo title="現在の色" hex={state.hex} rgb={state.rgb} hsl={state.hsl} />
+          <ColorInfo title="現在の色" rgb={state.rgb} />
           <small style={{ color: 'var(--color-text-tertiary)' }}>
             中心の白い丸の位置のピクセル色をリアルタイムで採取しています。
           </small>
@@ -47,14 +46,9 @@ export default function CameraSampler() {
         <div style={{ display: 'grid', gap: 8 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ fontWeight: 700 }}>確定した色</div>
-            {state.lockedHex && <FavoriteButton hex={state.lockedHex} />}
+            {state.lockedRgb && <FavoriteButton hex={rgbToHex(state.lockedRgb)} />}
           </div>
-          <ColorInfo
-            title={undefined}
-            hex={state.lockedHex}
-            rgb={state.lockedRgb}
-            hsl={state.lockedHsl}
-          />
+          <ColorInfo title={undefined} rgb={state.lockedRgb} />
         </div>
       ) : null}
     </div>

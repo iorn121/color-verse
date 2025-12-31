@@ -1,10 +1,11 @@
 import type { CSSProperties } from 'react';
 
+import type { Hex } from '../../lib/color';
 import ColorSwatch from './ColorSwatch';
 
 type BasicColor = {
   name: string;
-  hex: string; // #RRGGBB
+  hex: Hex; // #RRGGBB
 };
 
 type JisColorLabelProps = {

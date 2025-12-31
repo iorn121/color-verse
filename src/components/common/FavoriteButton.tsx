@@ -1,7 +1,8 @@
 import { useFavorites } from '../../hooks/useFavorites';
+import type { Hex } from '../../lib/color';
 
 type FavoriteButtonProps = {
-  hex: string;
+  hex: Hex;
   size?: number;
 };
 

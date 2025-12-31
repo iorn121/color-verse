@@ -1,11 +1,12 @@
 export type Rgb = { r: number; g: number; b: number };
 export type Hsl = { h: number; s: number; l: number };
+export type Hex = string; // '#RRGGBB'
 
 export function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
 
-export function hexToRgb(hex: string): Rgb | null {
+export function hexToRgb(hex: Hex): Rgb | null {
   const normalized = hex.replace('#', '').trim();
   const full =
     normalized.length === 3
@@ -21,7 +22,7 @@ export function hexToRgb(hex: string): Rgb | null {
   return { r, g, b };
 }
 
-export function rgbToHex({ r, g, b }: Rgb): string {
+export function rgbToHex({ r, g, b }: Rgb): Hex {
   const toHex = (n: number) => clamp(Math.round(n), 0, 255).toString(16).padStart(2, '0');
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
 }

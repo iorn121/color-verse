@@ -1,9 +1,10 @@
 import { z } from 'zod';
 
+import type { Hex } from './color';
 export interface JisColor {
   readonly name: string;
   readonly reading?: string; // 慣用色名の読み
-  readonly hex: string; // #RRGGBB
+  readonly hex: Hex; // #RRGGBB
   readonly group: string; // 和色名 / 外来色名 など
   readonly munsell?: string; // マンセル値
   readonly systemName?: string; // 系統色名

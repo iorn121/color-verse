@@ -1,8 +1,10 @@
 import type { CSSProperties } from 'react';
 
+import type { Hex } from '../../lib/color';
+
 type ColorWellProps = {
-  value: string;
-  onChange: (hex: string) => void;
+  value: Hex;
+  onChange: (hex: Hex) => void;
   size?: number;
   ariaLabel?: string;
   className?: string;

@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react';
 
-import type { Hsl, Rgb } from '../lib/color';
+import type { Hex, Hsl, Rgb } from '../lib/color';
 import { hexToRgb, hslToRgb, rgbToHex, rgbToHsl } from '../lib/color';
 import ColorInputs from './color/ColorInputs';
 import HslSliders from './color/HslSliders';
 import FavoriteButton from './common/FavoriteButton';
 
 export default function ColorPicker() {
-  const [hex, setHex] = useState('#4F46E5');
+  const [hex, setHex] = useState<Hex>('#4F46E5');
 
   const rgb: Rgb | null = useMemo(() => hexToRgb(hex), [hex]);
   const hsl: Hsl | null = useMemo(() => (rgb ? rgbToHsl(rgb) : null), [rgb]);

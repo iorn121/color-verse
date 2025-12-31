@@ -94,5 +94,3 @@ export function useCameraLoop(options?: UseCameraLoopOptions) {
     videoConstraints,
   };
 }
-
-

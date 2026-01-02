@@ -16,7 +16,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  pr-checks:
+  prettier:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
@@ -31,8 +31,38 @@ jobs:
         run: npm ci
       - name: Prettier check
         run: npm run format:check
+
+  eslint:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install
+        run: npm ci
       - name: ESLint
         run: npm run lint
+
+  typecheck:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Type check
+        run: npm run typecheck
 
   main-pass:
     if: github.event_name == 'push'

@@ -8,7 +8,8 @@ import { CvdType, useCameraCvd } from '../hooks/useCameraCvd';
 export default function CameraCvdPage() {
   const { webcamRef, canvasRef, state, setCvd, setSeverity, start, stop, setError } =
     useCameraCvd();
-  const { active, error, cvd, severity } = state;
+  const { active, error, cvd, severity, videoSize } = state;
+  const aspectRatioStyle = videoSize ? `${videoSize.width} / ${videoSize.height}` : undefined;
 
   return (
     <div style={{ display: 'grid', gap: 12 }}>
@@ -81,7 +82,7 @@ export default function CameraCvdPage() {
               width: '100%',
               borderRadius: 8,
               background: '#000',
-              aspectRatio: '16 / 9',
+              aspectRatio: aspectRatioStyle,
               objectFit: 'cover',
               visibility: 'hidden', // hidden video; canvas shows processed image
               position: 'absolute',
@@ -101,7 +102,7 @@ export default function CameraCvdPage() {
             maxWidth: 640,
             borderRadius: 8,
             background: '#000',
-            aspectRatio: '16 / 9',
+            aspectRatio: aspectRatioStyle,
           }}
         />
       </div>

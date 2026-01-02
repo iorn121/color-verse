@@ -22,9 +22,11 @@ export function useCameraLoop(options?: UseCameraLoopOptions) {
   const webcamRef = useRef<Webcam>(null!);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const rafRef = useRef<number | null>(null);
+  const lastDimRef = useRef<{ w: number; h: number }>({ w: 0, h: 0 });
 
   const [active, setActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [videoSize, setVideoSize] = useState<{ width: number; height: number } | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -44,6 +46,10 @@ export function useCameraLoop(options?: UseCameraLoopOptions) {
       if (canvas.width !== w || canvas.height !== h) {
         canvas.width = w;
         canvas.height = h;
+        if (lastDimRef.current.w !== w || lastDimRef.current.h !== h) {
+          lastDimRef.current = { w, h };
+          setVideoSize({ width: video.videoWidth, height: video.videoHeight });
+        }
       }
       // フレーム処理（呼び出し側に委譲）
       try {
@@ -87,7 +93,7 @@ export function useCameraLoop(options?: UseCameraLoopOptions) {
   return {
     webcamRef,
     canvasRef,
-    state: { active, error },
+    state: { active, error, videoSize },
     start: () => setActive(true),
     stop: () => setActive(false),
     setError,

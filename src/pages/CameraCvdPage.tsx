@@ -6,8 +6,9 @@ import PageTitle from '../components/common/PageTitle';
 import { CvdType, useCameraCvd } from '../hooks/useCameraCvd';
 
 export default function CameraCvdPage() {
-  const { webcamRef, canvasRef, state, setCvd, start, stop, setError } = useCameraCvd();
-  const { active, error, cvd } = state;
+  const { webcamRef, canvasRef, state, setCvd, setSeverity, start, stop, setError } =
+    useCameraCvd();
+  const { active, error, cvd, severity } = state;
 
   return (
     <div style={{ display: 'grid', gap: 12 }}>
@@ -43,6 +44,22 @@ export default function CameraCvdPage() {
             <option value="tritanopia">T型（Tritanopia）</option>
           </select>
         </label>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <label style={{ color: 'var(--color-text-secondary)' }}>Severity</label>
+        <input
+          type="range"
+          min={0}
+          max={1}
+          step={0.01}
+          value={severity}
+          onChange={(e) => setSeverity(parseFloat(e.target.value))}
+          style={{ width: 220 }}
+          aria-label="severity"
+        />
+        <span style={{ minWidth: 44, textAlign: 'right', color: 'var(--color-text-tertiary)' }}>
+          {severity.toFixed(2)}
+        </span>
       </div>
 
       {error && (
@@ -119,6 +136,21 @@ export default function CameraCvdPage() {
         <small style={{ color: 'var(--color-text-tertiary)' }}>
           本シミュレーターで切替可能なタイプ: C型 / P型 / D型 / T型。
         </small>
+      </div>
+
+      <div className="card" style={{ display: 'grid', gap: 6 }}>
+        <div style={{ fontWeight: 700 }}>参考</div>
+        <p style={{ margin: 0, color: 'var(--color-text-secondary)' }}>
+          シミュレーションのための数値は
+          <a
+            href="https://www.inf.ufrgs.br/~oliveira/pubs_files/CVD_Simulation/CVD_Simulation.html"
+            target="_blank"
+            rel="noreferrer"
+          >
+            A Physiologically-based Model for Simulation of Color Vision Deficiency
+          </a>
+          （Machado, Oliveira, Fernandes, 2009）を参考にしています。
+        </p>
       </div>
 
       <HomeLink fixed />

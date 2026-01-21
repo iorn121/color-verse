@@ -58,5 +58,3 @@ npm run preview
 ### ライセンス
 
 - 後日決定
-
-

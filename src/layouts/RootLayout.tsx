@@ -1,11 +1,13 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 
 export default function RootLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
   const toggleMenu = () => setMenuOpen((v) => !v);
   const closeMenu = () => setMenuOpen(false);
+  const { t } = useTranslation();
 
   return (
     <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column' }}>
@@ -28,7 +30,15 @@ export default function RootLayout() {
             >
               ColorVerse
             </Link>
-            <div style={{ marginLeft: 'auto', position: 'relative' }}>
+            <div
+              style={{
+                marginLeft: 'auto',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                position: 'relative',
+              }}
+            >
               <button
                 onClick={toggleMenu}
                 aria-haspopup="menu"
@@ -39,7 +49,7 @@ export default function RootLayout() {
                   border: '1px solid var(--color-border)',
                 }}
               >
-                メニュー
+                {t('header.menu')}
               </button>
 
               <AnimatePresence>
@@ -72,7 +82,7 @@ export default function RootLayout() {
                         })}
                         onClick={closeMenu}
                       >
-                        Home
+                        {t('nav.home')}
                       </NavLink>
                       <NavLink
                         to="/picker"
@@ -81,7 +91,7 @@ export default function RootLayout() {
                         })}
                         onClick={closeMenu}
                       >
-                        Picker
+                        {t('nav.picker')}
                       </NavLink>
                       <NavLink
                         to="/convert"
@@ -90,7 +100,7 @@ export default function RootLayout() {
                         })}
                         onClick={closeMenu}
                       >
-                        Convert
+                        {t('nav.convert')}
                       </NavLink>
                       <NavLink
                         to="/theory"
@@ -99,7 +109,7 @@ export default function RootLayout() {
                         })}
                         onClick={closeMenu}
                       >
-                        Theory
+                        {t('nav.theory')}
                       </NavLink>
                       <NavLink
                         to="/image"
@@ -108,7 +118,7 @@ export default function RootLayout() {
                         })}
                         onClick={closeMenu}
                       >
-                        Image
+                        {t('nav.image')}
                       </NavLink>
                       <NavLink
                         to="/camera"
@@ -117,7 +127,7 @@ export default function RootLayout() {
                         })}
                         onClick={closeMenu}
                       >
-                        Camera
+                        {t('nav.camera')}
                       </NavLink>
                       <NavLink
                         to="/color-quiz"
@@ -126,7 +136,7 @@ export default function RootLayout() {
                         })}
                         onClick={closeMenu}
                       >
-                        JIS慣用色クイズ
+                        {t('nav.quiz')}
                       </NavLink>
                       <NavLink
                         to="/colors"
@@ -135,7 +145,7 @@ export default function RootLayout() {
                         })}
                         onClick={closeMenu}
                       >
-                        色図鑑
+                        {t('nav.catalog')}
                       </NavLink>
                       <NavLink
                         to="/me"
@@ -144,7 +154,7 @@ export default function RootLayout() {
                         })}
                         onClick={closeMenu}
                       >
-                        マイページ
+                        {t('nav.mypage')}
                       </NavLink>
                     </nav>
                   </motion.div>

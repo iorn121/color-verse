@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 
 import ColorSwatch from '../components/common/ColorSwatch';
@@ -11,38 +12,39 @@ import type { JisColor } from '../lib/jisColors';
 import { JisColorModel } from '../lib/jisColors';
 
 export default function ColorCatalogPage() {
+  const { t } = useTranslation();
   const allColors = useLoaderData() as JisColor[];
   const navigate = useNavigate();
   const { filtered: colors, total, query, setQuery, group, setGroup } = useColorSearch(allColors);
 
   return (
     <div className="container animate-fade-in" style={{ display: 'grid', gap: 16 }}>
-      <PageTitle title="色図鑑（JIS慣用色）" />
-      <Description>検索やカテゴリで絞り込み、色の詳細と補色を確認できます。</Description>
+      <PageTitle title={t('pages.colors.title')} />
+      <Description>{t('pages.colors.desc')}</Description>
 
       <div className="card" style={{ display: 'grid', gap: 12, padding: 12 }}>
         <div className="flex items-center gap-sm">
           <input
-            aria-label="色名・Hex検索"
-            placeholder="色名・Hexで検索…"
+            aria-label={t('pages.colors.searchAria')}
+            placeholder={t('pages.colors.searchPlaceholder') ?? undefined}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="input"
             style={{ flex: 1, minWidth: 160 }}
           />
           <select
-            aria-label="分類フィルター"
+            aria-label={t('pages.colors.filterAria')}
             value={group}
             onChange={(e) => setGroup(e.target.value as GroupFilter)}
             className="input"
           >
-            <option value="all">すべて</option>
-            <option value="和色名">和色名</option>
-            <option value="外来色名">外来色名</option>
+            <option value="all">{t('pages.colors.filterAll')}</option>
+            <option value="和色名">{t('pages.colors.filterWa')}</option>
+            <option value="外来色名">{t('pages.colors.filterGairai')}</option>
           </select>
         </div>
         <div style={{ opacity: 0.7, fontSize: 12 }}>
-          該当件数: {colors.length} / {total}
+          {t('pages.colors.count')}: {colors.length} / {total}
         </div>
       </div>
 

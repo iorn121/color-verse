@@ -1,56 +1,38 @@
-# ColorVerse（カラーバース）
+### ColorVerse（カラーバース）
 
-色の学習・ツール・分析・創作を一体化するプラットフォーム。Vite + React + TypeScript 構成、PWA 対応。
+色の学習・ツール・分析・創作を一体化する PWA。Vite + React + TypeScript 構成で、ブラウザ内処理（Canvas/Web APIs）を中心に高速に動作します。
 
-## プロジェクト名
+### 主な機能（現状）
 
-- 正式名: **ColorVerse**
-- 略称: **CV**
-- 由来: 「色彩の宇宙・世界」。覚えやすくグローバルで通用。
-- 他候補: Chroma Hub / Palette Pro / ColorCraft
+- **カラーピッカー**: `HEX/RGB/HSL` の相互変換、数値入力・スライダー調整
+- **変換ツール**: `Hex ⇄ RGB ⇄ HSL` の双方向変換 UI
+- **画像の色調補正**: 明度/彩度/コントラスト調整（Canvas）
+- **カラー辞典（JIS）**: `public/jis_colors.csv` を用いた色名・コード参照
+- **お気に入り**: 色やパレットの保存（ローカル）
+- **クイズ**: 色当て・知識テスト用のクイズモード
+- **カメラ連携**: リアルタイムプレビュー、色抽出／サンプリング
+- **色覚特性シミュレーション**: カメラ映像に対する CVD シミュレーション
 
-## 要件（要約）
+### 画面（ページ）
 
-### コア機能カテゴリ
+- **Home**: 概要・ナビゲーション
+- **Picker**: カラーピッカー
+- **Convert**: 変換ツール
+- **Image Adjust**: 画像の色調補正
+- **Color Catalog / Detail**: JIS 色の一覧と詳細
+- **Camera / Camera CVD**: カメラプレビュー、色覚特性シミュレーション
+- **Color Quiz**: クイズモード
+- **My Page**: お気に入り・パレット関連
+- **Theory**: 色彩理論の概要
 
-- 知識・学習: 色彩理論、色の心理学、配色ルール（WCAG）、カラーコード辞典（Hex/RGB/HSL/CMYK、日本の伝統色、Web セーフ、パントーン）
-- ツール・変換: 画像処理（明度/彩度/コントラスト、フィルター、色相変更）、カメラ連携（リアルタイム色補正、カラーピッカー、WB 調整）、パレット生成（画像抽出/AI/トレンド）
-- 分析・診断: 色覚検査、配色チェッカー（コントラスト/WCAG）、画像分析（支配色/分布）
-- クリエイティブ: パレットメーカー（保存/共有）、グラデーション、パターン、スキーム提案（Web/インテリア/ファッション）
+### 技術スタック
 
-### 技術要件
+- **フロントエンド**: React + Vite + TypeScript
+- **Web API**: Canvas API、MediaDevices（カメラ）
+- **データ**: `public/jis_colors.csv`（JIS）、ローカル保存（お気に入り/履歴）
+- **PWA**: `vite-plugin-pwa` による Service Worker/manifest
 
-- フロントエンド: React + Vite、Canvas API/WebGL、MediaDevices API、PWA
-- 画像処理: Canvas API（必要に応じて Fabric.js/Konva.js、WASM）
-- データ管理: IndexedDB（ローカル保存、履歴）
-
-### UI/UX
-
-- 直感的ナビゲーション（タブ/サイドバー）、学習・ツール・ライブラリの区分
-- レスポンシブ（モバイルファースト）、ダークモード、多言語（日本語/英語）
-
-### MVP フェーズ
-
-- Phase 1: カラーピッカー / Hex-RGB-HSL 変換 / 基本理論 / 画像アップロード → 色調補正
-- Phase 2: カメラ統合 / パレット生成・保存 / 配色提案 AI / 知識ベース拡充
-- Phase 3: リアルタイムフィルター / コミュニティ共有 / エクスポート（CSS/JSON/画像）
-
-## 現在の実装（MVP 雛形）
-
-- ルーティングとページ
-  - `/` Home
-  - `/picker` カラーピッカー
-  - `/convert` Hex/RGB/HSL 変換
-  - `/theory` 色彩理論（概要）
-  - `/image` 画像の色調補正（Canvas、明度/彩度/コントラスト）
-- コンポーネント
-  - `ColorPicker`: input[type=color] + HEX/RGB/HSL 変換
-  - `ConversionTool`: 双方向変換 UI
-  - `ImageAdjuster`: Canvas による色調補正（ブラウザ内処理）
-- PWA
-  - `vite-plugin-pwa` による Service Worker 登録（dev でも有効化）、簡易 manifest
-
-## セットアップ
+### セットアップ
 
 ```bash
 # 依存関係のインストール
@@ -66,42 +48,13 @@ npm run build
 npm run preview
 ```
 
-## 構成
+### 今後の拡張（予定）
 
-```
-color-verse/
-├─ public/
-│  └─ favicon.svg
-├─ src/
-│  ├─ components/
-│  │  ├─ ColorPicker.tsx
-│  │  ├─ ConversionTool.tsx
-│  │  └─ ImageAdjuster.tsx
-│  ├─ lib/
-│  │  └─ color.ts
-│  ├─ pages/
-│  │  ├─ HomePage.tsx
-│  │  ├─ PickerPage.tsx
-│  │  ├─ ConvertPage.tsx
-│  │  ├─ TheoryPage.tsx
-│  │  └─ ImageAdjustPage.tsx
-│  ├─ App.tsx
-│  └─ main.tsx
-├─ index.html
-├─ package.json
-├─ tsconfig.json
-├─ tsconfig.node.json
-└─ vite.config.ts
-```
+- **パレット**: 生成（画像抽出/トレンド/AI）、保存・共有、エクスポート（CSS/JSON/画像）
+- **アクセシビリティ**: コントラスト比・WCAG チェック
+- **高速化**: WebGL/WASM による画像処理最適化
+- **プラットフォーム**: 多言語対応、ダークモード、IndexedDB 履歴強化
 
-## 今後の拡張（次ステップ）
+### ライセンス
 
-- IndexedDB によるパレット保存・履歴
-- アクセシビリティ（コントラスト比計算、WCAG 準拠 UI）
-- カメラ連携（MediaDevices API）とリアルタイム色抽出
-- 多言語（i18n）とダークモード
-- 高速画像処理のための WebGL / WASM 検討
-
-## ライセンス
-
-後日決定
+- 後日決定

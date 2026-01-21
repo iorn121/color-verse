@@ -1,0 +1,82 @@
+{
+  "header": {
+    "menu": "メニュー"
+  },
+  "nav": {
+    "home": "ホーム",
+    "picker": "ピッカー",
+    "convert": "変換",
+    "theory": "理論",
+    "image": "画像",
+    "camera": "カメラ",
+    "quiz": "JIS慣用色クイズ",
+    "catalog": "色図鑑",
+    "mypage": "マイページ"
+  },
+  "homeLink": {
+    "ariaHomeTitle": "ホームへ"
+  },
+  "language": {
+    "ja": "日本語",
+    "en": "English"
+  },
+  "pages": {
+    "home": {
+      "sections": {
+        "learn": "学ぶ",
+        "play": "遊ぶ",
+        "search": "探す",
+        "tools": "ツール"
+      },
+      "items": {
+        "cameraCvd": { "title": "色覚シミュレーション", "desc": "カメラ映像で色覚特性を体験" },
+        "theory": { "title": "基本的な色彩理論", "desc": "色相・補色・トーンをハンズオンで理解" },
+        "quiz": { "title": "JIS慣用色クイズ", "desc": "クイズで色の名前を覚えよう" },
+        "camera": { "title": "カメラピッカー", "desc": "カメラ映像から色をリアルタイムで採取" },
+        "colors": { "title": "色図鑑", "desc": "JIS 慣用色を一覧・検索" },
+        "picker": { "title": "カラーピッカー", "desc": "直感的に色を選択し、HEX/RGB/HSL を取得" },
+        "convert": { "title": "Hex/RGB/HSL 変換", "desc": "HEX・RGB・HSL を相互に素早く変換" },
+        "image": { "title": "画像の色調補正", "desc": "明度・彩度・コントラストを調整" }
+      }
+    },
+    "picker": { "title": "カラーピッカー" },
+    "convert": { "title": "Hex / RGB / HSL 変換" },
+    "theory": {
+      "title": "基本的な色彩理論（概要）",
+      "desc": "ここでは色相環、補色、類似色、三原色、RGB/CMYK の違い、色温度などの基礎を順次掲載していきます"
+    },
+    "camera": {
+      "title": "カメラ連携色ピッカー",
+      "desc": "カメラの中心ピクセルの色をリアルタイムで表示します"
+    },
+    "cameraCvd": {
+      "title": "色覚シミュレーション",
+      "desc": "カメラ映像を色覚特性ごとに擬似的に変換して表示します。",
+      "start": "カメラ開始",
+      "stop": "停止",
+      "error": "カメラエラー"
+    },
+    "colors": {
+      "title": "色図鑑（JIS慣用色）",
+      "desc": "検索やカテゴリで絞り込み、色の詳細と補色を確認できます。",
+      "searchAria": "色名・Hex検索",
+      "searchPlaceholder": "色名・Hexで検索…",
+      "filterAria": "分類フィルター",
+      "filterAll": "すべて",
+      "filterWa": "和色名",
+      "filterGairai": "外来色名",
+      "count": "該当件数"
+    },
+    "imageAdjust": {
+      "title": "画像の色調補正",
+      "desc": "明度・コントラスト・彩度を調整できます"
+    },
+    "my": {
+      "title": "マイページ",
+      "desc": "あなたの設定やお気に入りをまとめて確認できます。",
+      "favorites": "お気に入り",
+      "favoritesEmpty": "まだお気に入りがありません。各ページのハートから登録できます。",
+      "noJisName": "JISに対応する色名はありません"
+    }
+  }
+}

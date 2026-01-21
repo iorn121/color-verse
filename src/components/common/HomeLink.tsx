@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 type HomeLinkProps = {
@@ -8,6 +9,7 @@ type HomeLinkProps = {
 };
 
 export default function HomeLink({ to = '/', size = 20, fixed = false }: HomeLinkProps) {
+  const { t } = useTranslation();
   const fixedStyle: CSSProperties | undefined = fixed
     ? {
         position: 'fixed',
@@ -22,8 +24,8 @@ export default function HomeLink({ to = '/', size = 20, fixed = false }: HomeLin
   return (
     <Link
       to={to}
-      aria-label="ホームへ"
-      title="ホームへ"
+      aria-label={t('homeLink.ariaHomeTitle')}
+      title={t('homeLink.ariaHomeTitle')}
       style={{
         display: 'inline-flex',
         alignItems: 'center',

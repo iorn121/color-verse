@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 
 import ColorSwatch from '../components/common/ColorSwatch';
@@ -12,6 +13,7 @@ import type { JisColor } from '../lib/jisColors';
 import { JisColorModel } from '../lib/jisColors';
 
 export default function MyPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { set } = useFavorites();
   const loaded = useLoaderData() as JisColor[] | null;
@@ -28,15 +30,13 @@ export default function MyPage() {
 
   return (
     <div className="container animate-fade-in" style={{ display: 'grid', gap: 16 }}>
-      <PageTitle title="マイページ" />
-      <Description>あなたの設定やお気に入りをまとめて確認できます。</Description>
+      <PageTitle title={t('pages.my.title')} />
+      <Description>{t('pages.my.desc')}</Description>
 
       <section className="card" style={{ padding: 12, display: 'grid', gap: 12 }}>
-        <div style={{ fontWeight: 700 }}>お気に入り</div>
+        <div style={{ fontWeight: 700 }}>{t('pages.my.favorites')}</div>
         {list.length === 0 ? (
-          <div style={{ color: 'var(--color-text-secondary)' }}>
-            まだお気に入りがありません。各ページのハートから登録できます。
-          </div>
+          <div style={{ color: 'var(--color-text-secondary)' }}>{t('pages.my.favoritesEmpty')}</div>
         ) : (
           <div
             style={{
@@ -72,7 +72,7 @@ export default function MyPage() {
                       <JisColorLabel color={c} />
                     </button>
                   ) : (
-                    <div style={{ opacity: 0.7, fontSize: 12 }}>JISに対応する色名はありません</div>
+                    <div style={{ opacity: 0.7, fontSize: 12 }}>{t('pages.my.noJisName')}</div>
                   )}
                 </div>
               );

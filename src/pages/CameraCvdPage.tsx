@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Webcam from 'react-webcam';
 
 import Description from '../components/common/Description';
@@ -6,6 +7,7 @@ import PageTitle from '../components/common/PageTitle';
 import { CvdType, useCameraCvd } from '../hooks/useCameraCvd';
 
 export default function CameraCvdPage() {
+  const { t } = useTranslation();
   const { webcamRef, canvasRef, state, setCvd, setSeverity, start, stop, setError } =
     useCameraCvd();
   const { active, error, cvd, severity, videoSize } = state;
@@ -13,17 +15,17 @@ export default function CameraCvdPage() {
 
   return (
     <div style={{ display: 'grid', gap: 12 }}>
-      <PageTitle title="色覚シミュレーション" />
-      <Description>カメラ映像を色覚特性ごとに擬似的に変換して表示します。</Description>
+      <PageTitle title={t('pages.cameraCvd.title')} />
+      <Description>{t('pages.cameraCvd.desc')}</Description>
 
       <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
         {!active ? (
           <button className="btn btn-primary" onClick={start}>
-            カメラ開始
+            {t('pages.cameraCvd.start')}
           </button>
         ) : (
           <button className="btn" onClick={stop}>
-            停止
+            {t('pages.cameraCvd.stop')}
           </button>
         )}
         <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
@@ -39,10 +41,10 @@ export default function CameraCvdPage() {
               background: 'white',
             }}
           >
-            <option value="common">C型（一般色覚）</option>
-            <option value="deuteranopia">D型（Deuteranopia）</option>
-            <option value="protanopia">P型（Protanopia）</option>
-            <option value="tritanopia">T型（Tritanopia）</option>
+            <option value="common">Common (normal)</option>
+            <option value="deuteranopia">Deuteranopia (D)</option>
+            <option value="protanopia">Protanopia (P)</option>
+            <option value="tritanopia">Tritanopia (T)</option>
           </select>
         </label>
       </div>
@@ -65,7 +67,7 @@ export default function CameraCvdPage() {
 
       {error && (
         <div className="card" style={{ borderColor: '#fca5a5', color: '#b91c1c' }}>
-          カメラエラー: {error}
+          {t('pages.cameraCvd.error')}: {error}
         </div>
       )}
 

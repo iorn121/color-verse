@@ -1,0 +1,97 @@
+{
+  "header": {
+    "menu": "Menu"
+  },
+  "nav": {
+    "home": "Home",
+    "picker": "Picker",
+    "convert": "Convert",
+    "theory": "Theory",
+    "image": "Image",
+    "camera": "Camera",
+    "quiz": "JIS Colors Quiz",
+    "catalog": "Color Catalog",
+    "mypage": "My Page"
+  },
+  "homeLink": {
+    "ariaHomeTitle": "Go home"
+  },
+  "language": {
+    "ja": "日本語",
+    "en": "English"
+  },
+  "pages": {
+    "home": {
+      "sections": {
+        "learn": "Learn",
+        "play": "Play",
+        "search": "Explore",
+        "tools": "Tools"
+      },
+      "items": {
+        "cameraCvd": {
+          "title": "Color Vision Simulation",
+          "desc": "Experience color vision types via camera"
+        },
+        "theory": {
+          "title": "Basic Color Theory",
+          "desc": "Hands-on understanding of hue, complements, tones"
+        },
+        "quiz": { "title": "JIS Colors Quiz", "desc": "Learn color names with quizzes" },
+        "camera": {
+          "title": "Camera Picker",
+          "desc": "Sample colors in real-time from the camera"
+        },
+        "colors": { "title": "Color Catalog", "desc": "Browse and search JIS traditional colors" },
+        "picker": {
+          "title": "Color Picker",
+          "desc": "Pick colors intuitively and get HEX/RGB/HSL"
+        },
+        "convert": {
+          "title": "Hex/RGB/HSL Converter",
+          "desc": "Convert between HEX, RGB and HSL swiftly"
+        },
+        "image": { "title": "Image Adjuster", "desc": "Adjust brightness, saturation and contrast" }
+      }
+    },
+    "picker": { "title": "Color Picker" },
+    "convert": { "title": "Hex / RGB / HSL Converter" },
+    "theory": {
+      "title": "Basic Color Theory (Overview)",
+      "desc": "We cover fundamentals such as color wheel, complements, analogous colors, primary colors, RGB/CMYK differences, and color temperature."
+    },
+    "camera": {
+      "title": "Camera Color Picker",
+      "desc": "Shows the color of the center pixel in real time"
+    },
+    "cameraCvd": {
+      "title": "Color Vision Simulation",
+      "desc": "Applies simulated color vision types to the camera feed.",
+      "start": "Start Camera",
+      "stop": "Stop",
+      "error": "Camera error"
+    },
+    "colors": {
+      "title": "Color Catalog (JIS Traditional)",
+      "desc": "Filter by keyword or category, and view details and complements.",
+      "searchAria": "Search by Name or Hex",
+      "searchPlaceholder": "Search by name or hex…",
+      "filterAria": "Category filter",
+      "filterAll": "All",
+      "filterWa": "Washa (Japanese traditional names)",
+      "filterGairai": "Gairaigo (Loanwords)",
+      "count": "Matches"
+    },
+    "imageAdjust": {
+      "title": "Image Adjuster",
+      "desc": "Adjust brightness, contrast and saturation"
+    },
+    "my": {
+      "title": "My Page",
+      "desc": "See your preferences and favorites at a glance.",
+      "favorites": "Favorites",
+      "favoritesEmpty": "No favorites yet. Tap the heart on any page to save.",
+      "noJisName": "No corresponding JIS color name"
+    }
+  }
+}

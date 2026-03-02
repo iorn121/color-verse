@@ -487,6 +487,15 @@ code {
   animation: rainbow 3s ease infinite;
 }
 
+/* Prismatrix (mobile-friendly layout tweaks) */
+.prismatrix-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 /* ============================================
    Responsive Design
    ============================================ */
@@ -512,6 +521,18 @@ code {
   }
   h3 {
     font-size: var(--text-xl);
+  }
+}
+
+@media (max-width: 520px) {
+  .prismatrix-actions {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .prismatrix-actions .btn {
+    padding-inline: 12px;
   }
 }
 

@@ -10,6 +10,7 @@
     "image": "Image",
     "camera": "Camera",
     "quiz": "JIS Colors Quiz",
+    "prismatrix": "Prismatrix",
     "catalog": "Color Catalog",
     "mypage": "My Page"
   },
@@ -38,6 +39,10 @@
           "desc": "Hands-on understanding of hue, complements, tones"
         },
         "quiz": { "title": "JIS Colors Quiz", "desc": "Learn color names with quizzes" },
+        "prismatrix": {
+          "title": "Prismatrix",
+          "desc": "Deduce the colors and placements of translucent tiles"
+        },
         "camera": {
           "title": "Camera Picker",
           "desc": "Sample colors in real-time from the camera"
@@ -92,6 +97,54 @@
       "favorites": "Favorites",
       "favoritesEmpty": "No favorites yet. Tap the heart on any page to save.",
       "noJisName": "No corresponding JIS color name"
+    },
+    "prismatrix": {
+      "title": "Prismatrix",
+      "desc": "From the final 4×4 board, deduce the colors and placements of six 2×2 translucent tiles (12 hues).",
+      "loading": "Generating…",
+      "sections": {
+        "puzzle": "Puzzle",
+        "answer": "Answer",
+        "place": "Placement",
+        "solution": "Solution"
+      },
+      "labels": {
+        "selectedCount": "Answered: {{count}}/6",
+        "active": "Active: {{hue}}"
+      },
+      "hints": {
+        "topLeftOnly": "Click the gap between 4 cells to place (x,y ∈ {0,1,2})"
+      },
+      "buttons": {
+        "check": "Check",
+        "newPuzzle": "New",
+        "showSolution": "Solution",
+        "hideSolution": "Hide",
+        "resetAnswer": "Reset"
+      },
+      "messages": {
+        "generateFailed": "Failed to generate a puzzle. Please try again.",
+        "selectUpToSix": "You can select up to 6 tiles.",
+        "pickActiveTile": "Pick an active tile to place (from your selected tiles).",
+        "pickFromSelected": "Select a tile from the palette first.",
+        "invalidTopLeft": "Only cells with x,y in 0–2 can be the top-left.",
+        "overlapExceeded": "Overlap exceeds the limit (max {{max}}). Try another position.",
+        "placeAllSix": "Place all 6 tiles.",
+        "selectSix": "Select 6 tiles."
+      },
+      "feedback": "Exact matches: {{exact}}/6, Hue-only matches: {{hueOnly}}/6",
+      "feedbackComplete": "Perfect!",
+      "solutionHint": "The completed board glows, then tiles lift up from the top one by one.",
+      "correctBonus": "Correct!",
+      "solutionItem": "top-left x={{x}}, y={{y}} (col {{col}}, row {{row}})",
+      "aria": {
+        "puzzleBoard": "Puzzle board",
+        "answerBoard": "Answer board",
+        "answerCell": "Answer board cell",
+        "solutionBoard": "Solution board",
+        "placeAt": "Place with top-left at ({{x}},{{y}})",
+        "hueButton": "Tile hue {{hue}}"
+      }
     }
   }
 }

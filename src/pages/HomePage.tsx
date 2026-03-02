@@ -37,6 +37,11 @@ export default function HomePage() {
               title={t('pages.home.items.quiz.title')}
               description={t('pages.home.items.quiz.desc')}
             />
+            <PaletteListItem
+              to="/prismatrix"
+              title={t('pages.home.items.prismatrix.title')}
+              description={t('pages.home.items.prismatrix.desc')}
+            />
           </ul>
         </section>
 

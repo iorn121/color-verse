@@ -10,6 +10,7 @@
     "image": "画像",
     "camera": "カメラ",
     "quiz": "JIS慣用色クイズ",
+    "prismatrix": "Prismatrix",
     "catalog": "色図鑑",
     "mypage": "マイページ"
   },
@@ -32,6 +33,10 @@
         "cameraCvd": { "title": "色覚シミュレーション", "desc": "カメラ映像で色覚特性を体験" },
         "theory": { "title": "基本的な色彩理論", "desc": "色相・補色・トーンをハンズオンで理解" },
         "quiz": { "title": "JIS慣用色クイズ", "desc": "クイズで色の名前を覚えよう" },
+        "prismatrix": {
+          "title": "Prismatrix",
+          "desc": "半透明タイルの色と配置を推理するパズル"
+        },
         "camera": { "title": "カメラピッカー", "desc": "カメラ映像から色をリアルタイムで採取" },
         "colors": { "title": "色図鑑", "desc": "JIS 慣用色を一覧・検索" },
         "picker": { "title": "カラーピッカー", "desc": "直感的に色を選択し、HEX/RGB/HSL を取得" },
@@ -77,6 +82,54 @@
       "favorites": "お気に入り",
       "favoritesEmpty": "まだお気に入りがありません。各ページのハートから登録できます。",
       "noJisName": "JISに対応する色名はありません"
+    },
+    "prismatrix": {
+      "title": "Prismatrix",
+      "desc": "4×4の最終盤面から、6枚の2×2半透明タイル（色相12種）の色と配置を推理します。",
+      "loading": "生成中…",
+      "sections": {
+        "puzzle": "問題",
+        "answer": "回答",
+        "place": "配置",
+        "solution": "解答"
+      },
+      "labels": {
+        "selectedCount": "回答: {{count}}/6",
+        "active": "アクティブ: {{hue}}"
+      },
+      "hints": {
+        "topLeftOnly": "4マスの間（隙間）をクリックして配置します（x,y ∈ {0,1,2}）"
+      },
+      "buttons": {
+        "check": "チェック",
+        "newPuzzle": "新規",
+        "showSolution": "解答",
+        "hideSolution": "隠す",
+        "resetAnswer": "リセット"
+      },
+      "messages": {
+        "generateFailed": "問題の生成に失敗しました。もう一度お試しください。",
+        "selectUpToSix": "タイルは最大6枚まで選べます。",
+        "pickActiveTile": "配置するタイルを選んでください（選択済みの色からアクティブを指定）。",
+        "pickFromSelected": "まずパレットでタイルを選択してください。",
+        "invalidTopLeft": "左上にできるのは x,y が 0〜2 のマスだけです。",
+        "overlapExceeded": "重なりが上限（{{max}}枚）を超えます。別の位置にしてください。",
+        "placeAllSix": "6枚すべて配置してください。",
+        "selectSix": "6枚選択してください。"
+      },
+      "feedback": "完全一致: {{exact}}/6、色のみ一致: {{hueOnly}}/6",
+      "feedbackComplete": "完全一致！",
+      "solutionHint": "完成盤面が少し発光してから、上から1枚ずつタイルが浮き上がります。",
+      "correctBonus": "正解！",
+      "solutionItem": "左上 x={{x}}, y={{y}}（{{col}}列・{{row}}行）",
+      "aria": {
+        "puzzleBoard": "問題の盤面",
+        "answerBoard": "回答の盤面",
+        "answerCell": "回答盤面のマス",
+        "solutionBoard": "解答の盤面",
+        "placeAt": "左上を ({{x}},{{y}}) に配置",
+        "hueButton": "色相 {{hue}} のタイル"
+      }
     }
   }
 }

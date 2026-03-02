@@ -139,6 +139,15 @@ export default function RootLayout() {
                         {t('nav.quiz')}
                       </NavLink>
                       <NavLink
+                        to="/prismatrix"
+                        style={({ isActive }) => ({
+                          color: isActive ? 'var(--color-primary)' : 'var(--color-text-primary)',
+                        })}
+                        onClick={closeMenu}
+                      >
+                        {t('nav.prismatrix')}
+                      </NavLink>
+                      <NavLink
                         to="/colors"
                         style={({ isActive }) => ({
                           color: isActive ? 'var(--color-primary)' : 'var(--color-text-primary)',

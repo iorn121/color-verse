@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
+import { createBrowserRouter, createRoutesFromElements, Navigate, Route } from 'react-router-dom';
 
 import RootLayout from './layouts/RootLayout';
 import { JisColorModel } from './lib/jisColors';
@@ -12,6 +12,7 @@ import HomePage from './pages/HomePage';
 import ImageAdjustPage from './pages/ImageAdjustPage';
 import MyPage from './pages/MyPage';
 import PickerPage from './pages/PickerPage';
+import PrismatrixPage from './pages/PrismatrixPage';
 import TheoryPage from './pages/TheoryPage';
 
 export const router = createBrowserRouter(
@@ -25,6 +26,8 @@ export const router = createBrowserRouter(
       <Route path="camera" element={<CameraPage />} />
       <Route path="camera-cvd" element={<CameraCvdPage />} />
       <Route path="color-quiz" element={<ColorQuizPage />} loader={() => JisColorModel.loadAll()} />
+      <Route path="prismatrix" element={<PrismatrixPage />} />
+      <Route path="filter-tiles" element={<Navigate to="/prismatrix" replace />} />
       <Route path="colors" element={<ColorCatalogPage />} loader={() => JisColorModel.loadAll()} />
       <Route path="me" element={<MyPage />} loader={() => JisColorModel.loadAll()} />
       <Route

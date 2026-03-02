@@ -774,7 +774,9 @@ export default function PrismatrixPage() {
                                       flex: '0 0 auto',
                                     }}
                                   />
-                                  <span style={{ fontSize: 12, color: 'var(--color-text-tertiary)' }}>
+                                  <span
+                                    style={{ fontSize: 12, color: 'var(--color-text-tertiary)' }}
+                                  >
                                     {hueLabel(tile.hue)}
                                   </span>
                                   <span>

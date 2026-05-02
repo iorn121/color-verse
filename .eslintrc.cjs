@@ -14,6 +14,10 @@ module.exports = {
       files: ['*.cjs', '*.config.*', '.eslintrc.cjs', 'vite.config.*'],
       env: { node: true, browser: false },
     },
+    {
+      files: ['scripts/**/*.mjs'],
+      env: { node: true, browser: false },
+    },
   ],
   plugins: ['@typescript-eslint', 'react', 'react-hooks', 'import', 'simple-import-sort'],
   extends: [

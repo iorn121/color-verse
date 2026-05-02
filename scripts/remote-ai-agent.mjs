@@ -120,6 +120,9 @@ try {
   } finally {
     await agent[Symbol.asyncDispose]();
   }
+  // SDK 内部の保留ハンドル（AbortSignal 等）でイベントループが空にならず、
+  // GHA の「Run Cursor agent」ステップが終了しないことがあるため明示終了する。
+  process.exit(0);
 } catch (err) {
   if (err instanceof CursorAgentError) {
     console.error('CursorAgentError:', err.message);

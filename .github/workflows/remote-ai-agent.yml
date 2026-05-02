@@ -80,8 +80,8 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore(ai): apply Issue #${{ github.event.issue.number }}"
-          title: "AI: ${{ github.event.issue.title }}"
+          commit-message: 'chore(ai): apply Issue #${{ github.event.issue.number }}'
+          title: 'AI: ${{ github.event.issue.title }}'
           body: |
             自動生成 PR（Remote AI Agent）。
 

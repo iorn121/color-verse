@@ -4,6 +4,7 @@ import RootLayout from './layouts/RootLayout';
 import { JisColorModel } from './lib/jisColors';
 import CameraCvdPage from './pages/CameraCvdPage';
 import CameraPage from './pages/CameraPage';
+import ColorAnalysisPage from './pages/ColorAnalysisPage';
 import ColorCatalogPage from './pages/ColorCatalogPage';
 import ColorDetailPage from './pages/ColorDetailPage';
 import ColorQuizPage from './pages/ColorQuizPage';
@@ -23,6 +24,7 @@ export const router = createBrowserRouter(
       <Route path="convert" element={<ConvertPage />} />
       <Route path="theory" element={<TheoryPage />} />
       <Route path="image" element={<ImageAdjustPage />} />
+      <Route path="color-analysis" element={<ColorAnalysisPage />} />
       <Route path="camera" element={<CameraPage />} />
       <Route path="camera-cvd" element={<CameraCvdPage />} />
       <Route path="color-quiz" element={<ColorQuizPage />} loader={() => JisColorModel.loadAll()} />

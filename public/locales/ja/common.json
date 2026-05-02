@@ -8,6 +8,7 @@
     "convert": "変換",
     "theory": "理論",
     "image": "画像",
+    "colorAnalysis": "色彩分析",
     "camera": "カメラ",
     "quiz": "JIS慣用色クイズ",
     "prismatrix": "Prismatrix",
@@ -41,7 +42,11 @@
         "colors": { "title": "色図鑑", "desc": "JIS 慣用色を一覧・検索" },
         "picker": { "title": "カラーピッカー", "desc": "直感的に色を選択し、HEX/RGB/HSL を取得" },
         "convert": { "title": "Hex/RGB/HSL 変換", "desc": "HEX・RGB・HSL を相互に素早く変換" },
-        "image": { "title": "画像の色調補正", "desc": "明度・彩度・コントラストを調整" }
+        "image": { "title": "画像の色調補正", "desc": "明度・彩度・コントラストを調整" },
+        "colorAnalysis": {
+          "title": "画像の色彩分析",
+          "desc": "支配色パレットと平均色を K-Means で推定（縮小後に解析）"
+        }
       }
     },
     "picker": { "title": "カラーピッカー" },
@@ -75,6 +80,26 @@
     "imageAdjust": {
       "title": "画像の色調補正",
       "desc": "明度・コントラスト・彩度を調整できます"
+    },
+    "colorAnalysis": {
+      "title": "画像の色彩分析",
+      "desc": "画像をアップロードすると、縮小画像上で K-Means により支配色を抽出します。白・黒に近い背景や占有率が極端に高い色は別枠にまとめ、彩度のある色を優先して上位を表示します。チップをクリックすると HEX をコピーできます。",
+      "pickImage": "画像を選ぶ",
+      "analyzing": "解析中…",
+      "average": "平均色",
+      "palette": "支配色パレット",
+      "background": "検出された背景色",
+      "clickCopy": "クリックでコピー",
+      "copied": "{{hex}} をコピーしました",
+      "copyFailed": "コピーに失敗しました",
+      "error": "画像を読み込めませんでした。別のファイルを試してください。",
+      "noDominant": "背景除去の結果、表示する支配色がありません。",
+      "types": {
+        "vibrant": "鮮やか",
+        "muted": "落ち着き",
+        "light": "明るい",
+        "dark": "暗い"
+      }
     },
     "my": {
       "title": "マイページ",

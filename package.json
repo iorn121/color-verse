@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "lint": "eslint . --ext .ts,.tsx --max-warnings=0",
+    "lint": "eslint . --ext .ts,.tsx,.mjs --max-warnings=0",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "check": "npm run format:check && npm run lint && npm run typecheck"
@@ -27,6 +27,7 @@
     "zod": "^4.2.1"
   },
   "devDependencies": {
+    "@cursor/sdk": "^1.0.12",
     "@types/node": "^20.12.12",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",

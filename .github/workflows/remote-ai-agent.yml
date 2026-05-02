@@ -1,0 +1,93 @@
+# Issue タイトルに [AI] を含み、かつ信頼できる起票者のみ実行。
+# リポジトリシークレット CURSOR_API_KEY（Cursor ダッシュボードで発行）が必須。
+name: Remote AI Agent
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: remote-ai-agent-issue-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  maintenance:
+    name: Cursor agent and PR
+    if: >
+      contains(github.event.issue.title, '[AI]') &&
+      (github.event.issue.author_association == 'OWNER' ||
+       github.event.issue.author_association == 'MEMBER' ||
+       github.event.issue.author_association == 'COLLABORATOR')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: read
+
+    env:
+      PROMPT_PATH: /tmp/remote-ai-agent-prompt.txt
+
+    steps:
+      - name: Require Cursor API key
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+        run: |
+          if [ -z "${CURSOR_API_KEY:-}" ]; then
+            echo "::error::Repository secret CURSOR_API_KEY is not set. Add it under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build agent prompt (shell-safe)
+        env:
+          ISSUE_HTML_URL: ${{ github.event.issue.html_url }}
+        run: |
+          set -euo pipefail
+          {
+            echo "You are working on this Git repository. Obey \`.cursorrules\` and existing patterns."
+            echo "Repository: ${GITHUB_REPOSITORY}"
+            echo "Issue URL: ${ISSUE_HTML_URL}"
+            echo ""
+            echo "---"
+            echo ""
+            jq -r '"## " + .issue.title + "\n\n" + (.issue.body // "")' "${GITHUB_EVENT_PATH}"
+          } > "${PROMPT_PATH}"
+
+      - name: Run Cursor agent (@cursor/sdk)
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          AGENT_PROMPT_FILE: ${{ env.PROMPT_PATH }}
+        run: node scripts/remote-ai-agent.mjs
+
+      - name: Verify (typecheck & build)
+        run: npm run typecheck && npm run build
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore(ai): apply Issue #${{ github.event.issue.number }}'
+          title: 'AI: ${{ github.event.issue.title }}'
+          body: |
+            自動生成 PR（Remote AI Agent）。
+
+            - Issue: #${{ github.event.issue.number }}
+            - Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            **レビュー後にマージしてください。**
+          branch: ai/issue-${{ github.event.issue.number }}-${{ github.run_id }}
+          delete-branch: true

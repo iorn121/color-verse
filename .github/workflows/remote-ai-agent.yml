@@ -75,10 +75,15 @@ jobs:
           AGENT_PROMPT_FILE: ${{ env.PROMPT_PATH }}
           # 30 分で打ち切り（ミリ秒）。必要ならリポジトリ Variables で上書き可
           AGENT_TIMEOUT_MS: ${{ vars.AGENT_TIMEOUT_MS || '1800000' }}
+          # agent[asyncDispose] が返らないと GHA のこのステップが終わらないため上限を付与
+          AGENT_DISPOSE_TIMEOUT_MS: '30000'
         run: node scripts/remote-ai-agent.mjs
 
-      - name: Verify (typecheck & build)
-        run: npm run typecheck && npm run build
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6

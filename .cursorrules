@@ -1,0 +1,132 @@
+# Color Verse — Cursor / AI エージェント向けプロジェクトルール
+
+このファイルは Color Verse リポジトリ内の実装・ドキュメント生成時に最優先で従う。
+
+### プロジェクトの現状（齟齬を防ぐ前提）
+
+- **色**: 実装の多くは **`src/index.css`** の `:root` / `[data-theme='dark']` に CSS 変数（`--color-*` 等）として定義されている。ルール上の SSOT パスは **`src/theme/colors.json`** だが、**未作成のうちは** `index.css` が事実上の供給源。色まわりを本格整理するタスクでは `src/theme/colors.json` を**新規追加**し、`index.css`・`vite.config.ts` の `manifest` 色と整合させる（一括移行は必須にしない）。
+- **ディレクトリ**: `docs/spec/`・`src/theme/`・`themes/` は**初回の仕様/実装で必要になったら作成**する（空の前提にしない）。
+- **PWA**: テーマ色は **`vite.config.ts` の `VitePWA` → `manifest.theme_color` / `background_color`**（現状は `#111827`）。**`index.html` には** 手書きの `theme-color` や `manifest` 用 `<link>` はない。`vite-plugin-pwa` がビルド時に注入する想定のため、**`index.html` の `<base href="%BASE_URL%">`・`favicon`・`#root`・`main.tsx` エントリを壊さない**こと。重複する PWA 用 meta を手で足して二重化しない。
+- **JIS 色データ**: `public/jis_colors.csv` と `src/lib/jisColors.ts`（Zod 等）を参照。
+
+---
+
+## 1. 技術スタックとディレクトリ構造
+
+### 1.1 コア
+
+- **ビルド / 言語**: Vite 7（ESM）、TypeScript 5.5、React 18、react-router-dom、framer-motion
+- **検証**: Zod。外部データ・API 応答・CSV/JSON のパース境界では必ずスキーマを通す
+- **i18n**: i18next / react-i18next。辞書は **`public/locales/{ja|en}/common.json`**（名前空間 `common`、追加 NS は `src/i18n.ts` とセットで拡張）。UI 文言の長文をコンポーネントに直書きしない
+
+### 1.2 `src/` 配下の役割（一行定義）
+
+新規コードは **ここに書かれた置き場所に載せる**。Atomic Design は採用しない。迷ったら `pages` vs `components` のみ判断し、**`features/`・`app/`・`modules/` など未登録のトップレベルディレクトリを新設しない**（仕様書で必要性と名前を明示しユーザー承認があった場合のみ可）。
+
+| パス | 役割 |
+|------|------|
+| `src/pages/` | ルートに対応する画面コンポーネント（1 URL 相当の塊） |
+| `src/components/` | 複数画面で再利用する UI。サブフォルダは機能単位（例: `color/`, `camera/`, `common/`） |
+| `src/layouts/` | 共通レイアウト（ヘッダー枠・ルートアウトレット等） |
+| `src/lib/` | 純ロジック、色計算、JIS 読込、ストレージ、文字列定数連携など（UI を持たない） |
+| `src/hooks/` | `use*` カスタムフック（副作用・ブラウザ API・ドメイン状態の再利用） |
+| `src/theme/` | **ルール上の SSOT 置き場**（`colors.json` + 補助コード・型）。**未作成なら**色整理・新トークン導入の作業で追加（※配布用 VS Code テーマ JSON の置き場は下記 `themes/`） |
+| `src/router.tsx` | ルート定義の単一入口 |
+| `src/main.tsx` | エントリ |
+| `src/index.css` | グローバル CSS と CSS 変数（`colors.json` と整合させる） |
+| `src/i18n.ts` | i18n 初期化 |
+
+### 1.3 リポジトリ直下・その他
+
+| パス | 役割 |
+|------|------|
+| `docs/spec/` | 機能仕様書（Markdown）。**未作成なら**新機能の最初にディレクトリを作る |
+| `themes/*.json` | VS Code 用 Color Theme 形式を置く場所（**未作成なら**必要時に `themes/` を新設）。`$schema` 必須 |
+| `public/` | 静的資産、`locales/`、`jis_colors.csv`、PWA 用に参照されるアイコン等 |
+| `vite.config.ts` | Vite + **PWA（破壊的変更に注意）** |
+
+---
+
+## 2. 色情報の単一真実源（SSOT）
+
+- **定義ファイル（ルール上の正）**: **`src/theme/colors.json` のみ**（別名の重複ファイルを増やさない）。ファイルがまだ無い場合は、**色に関する本改修の冒頭で新規作成**する。
+- **現状との関係**: 既存の見た目は `src/index.css` の変数に依存。`colors.json` 導入後は、**新規のプロダクト用色**は `colors.json` → `index.css`（`var`）の順で足し、重複する直書き Hex を増やさない。既存ブロックの一括移行は任意の別タスクでよい。
+- **ワークフロー**:
+  1. 新しいブランド色・セマンティック色が要るときは、**先に `src/theme/colors.json`**（なければ作成）にトークンを追加する。
+  2. UI では **`var(--…)`** か、必要に応じて `colors.json` の import 参照に統一する。
+  3. 「JSON → CSS 変数」同期の自動化は仕様に書いてよい。
+- **禁止**:
+  - `colors.json` に存在しない（または未整備の）Hex を、**新規**の UI 用 `style` / 通常 CSS に安易に直書きすること。
+  - PWA の **`vite.config.ts` 内 `manifest.theme_color` / `background_color`** を、アプリの基調色と無関係にズラし続けること。`colors.json` 整備後は、**基調色と同系か仕様で理由付き**に揃える（現状の `#111827` を変える場合は意図を仕様に明記）。
+- **例外**: 変換アルゴリズムの中間値、Canvas ピクセル、ユーザー入力色、短いテスト用固定値。
+
+---
+
+## 3. VS Code テーマ JSON
+
+- **配置**: 配布用テーマをリポジトリに含める場合は **`themes/*.json`**（**必要時に** `themes/` ディレクトリを新設）。
+- **スキーマ（必須）**: 各ファイルの先頭付近に次を含める（値は URL のみ。Markdown リンクにしない）。
+
+  ```json
+  "$schema": "https://json.schemastore.org/vscode-color-theme.json"
+  ```
+
+- **一貫性**: テーマ内の色は、**存在すれば** `src/theme/colors.json` のトークンと対応付け可能であること。`colors.json` 未導入の段階では、少なくとも `index.css` / プロダクト基調と矛盾しない旨を仕様に書く。
+- **注**: `.vscode/settings.json` の `workbench.colorCustomizations` は別形式。`themes/*.json` のような Color Theme ファイルにだけ `$schema` を付ける。
+
+---
+
+## 4. PWA / Service Worker のガードレール（破壊的変更）
+
+次を変更するとオフライン挙動・更新・インストールが壊れやすい。**タッチする前に仕様に影響範囲を書き、最小差分にする。**
+
+- **`vite.config.ts` の `VitePWA(...)`**: `registerType: 'autoUpdate'`、`manifest`（`name`, `short_name`, `description`, `theme_color`, `background_color`, `display`, `start_url`, `scope`, `lang`）、`pwaAssets`（`public/favicon.svg` 起点、`overrideManifestIcons`）、`devOptions.enabled`、`base`（GitHub Pages 用のサブパス）を軽視しない。
+- **キャッシュ戦略**: Workbox のカスタムや `injectManifest` へ切り替える場合は、静的資産と **`public/locales/`** の読み込みが `import.meta.env.BASE_URL` を前提にしていることを確認する。
+- **`index.html`（源ファイル）**: 現状は **`index.html` に `theme-color` や web manifest の `<link>` は無い**（ビルド時に PWA プラグインが注入）。`<base href="%BASE_URL%">`、`<link rel="icon" href="./favicon.svg">`、`#root`、`./src/main.tsx` を削除・破壊しない。手動で PWA 用 meta を重複追加しない。
+
+アプリの基調色や manifest 色を変える場合は、**`vite.config.ts` の `manifest`** と（整備済みなら）**`src/theme/colors.json`** をセットで考える。
+
+---
+
+## 5. AI エージェントの自律ワークフロー（強制）
+
+### 5.1 新機能依頼時のパイプライン
+
+ユーザーから機能追加があったら、**次の順を飛ばさない**。
+
+1. **Plan**: `docs/spec/<slug>.md` を作成する。
+   - `src/lib/color.ts`・`src/lib/jisColors.ts`・既存ページとの境界を検討に含める。
+   - 新規文言は **`public/locales/ja/common.json` と `en/common.json` の両方**にキー追加が必要か検討する。
+   - 色が絡む場合は **`src/theme/colors.json`** へ（未作成なら**新規作成**と）トークン追加を最初に書き、既存の `index.css` との関係を明記する。
+   - VS Code テーマ生成・編集が絡む場合は **`themes/*.json` + `$schema`** を仕様に含める。
+2. **Review**: ユーザーに仕様の承認を求める（承認なしに本番規模の実装を進めない）。
+3. **Execute**: 承認後にコードを生成・編集する。
+   - 外部・不定形データは **Zod**。
+   - PWA 設定への影響を確認する（セクション 4）。
+
+### 5.2 検証コマンドの義務化
+
+編集完了後、**毎回** ユーザーへ次を実行・確認するよう促す：
+
+```bash
+npm run typecheck && npm run build
+```
+
+CI と揃えるなら `npm run check`、スタイル修正なら `npm run lint` を併記してよい。
+
+---
+
+## 6. 出力スタイル
+
+- **Less chat, more code**: 挨拶や長い解説は最小。ファイルパスと変更内容が伝わるコード・差分を優先する。
+- **Next action**: 回答末尾は「次に実行するコマンド」または「確認すべきファイル」で締める。
+- **Boundary aware**: `src/lib/color.ts` のアルゴリズムと既存コンポーネントパターンを尊重し、車輪の再発明を避ける。
+
+---
+
+## 7. 「新機能を追加して」のときの既定動作（要約）
+
+1. `docs/spec/<slug>.md` のドラフト
+2. SSOT・i18n・PWA・（該当時）`themes/*.json` を仕様に含める
+3. 承認後に実装
+4. 完了時に `npm run typecheck && npm run build` を提示

@@ -1,0 +1,45 @@
+name: AI エージェント依頼（Remote AI Agent）
+description: Cursor エージェントにリポジトリ上で作業させる（GitHub Actions）
+title: "[AI] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **前提**
+
+        - ワークフローは Issue の **タイトルに `[AI]` が含まれる**ときだけ走ります（このテンプレでは先頭が `[AI] ` になっています。続きに短い要約を書いてください）。
+        - **起票者が Owner / Member / Collaborator** のときだけ実行されます。
+        - リポジトリの **Actions 用シークレット `CURSOR_API_KEY`** が設定されている必要があります。
+        - 結果は **Pull Request** として作成されます。マージは人間が確認してから行ってください。
+  - type: textarea
+    id: task
+    attributes:
+      label: やってほしいこと（必須）
+      description: エージェントへの指示。具体的に書くほど成功率が上がります。
+      placeholder: |
+        例：README.md に「開発時は npm run dev」と一行追記する。
+        例：〇〇ページの△△の文言を、locales のキー経由にする。
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: スコープ・触らないでほしいもの（任意）
+      description: 変更してよい範囲や、変えてほしくないファイルがあれば書いてください。
+      placeholder: |
+        触ってよい：README のみ
+        触らない：vite.config.ts、index.html
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 完了の条件（任意）
+      description: エージェントが満たすべき条件があれば。
+      placeholder: 例：npm run typecheck と npm run build が通ること。ja / en の両方に文言があること。
+  - type: checkboxes
+    id: ack
+    attributes:
+      label: 確認
+      options:
+        - label: 私はこのリポジトリの Owner / Member / Collaborator として起票している（それ以外では Actions は実行されません）
+          required: true

@@ -33,6 +33,18 @@ export default function MyPage() {
       <PageTitle title={t('pages.my.title')} />
       <Description>{t('pages.my.desc')}</Description>
 
+      <div
+        className="card"
+        style={{
+          padding: 12,
+          fontSize: 12,
+          color: 'var(--color-text-secondary)',
+          fontFamily: 'ui-monospace, Menlo, monospace',
+        }}
+      >
+        {t('smoke.remoteAi')}
+      </div>
+
       <section className="card" style={{ padding: 12, display: 'grid', gap: 12 }}>
         <div style={{ fontWeight: 700 }}>{t('pages.my.favorites')}</div>
         {list.length === 0 ? (

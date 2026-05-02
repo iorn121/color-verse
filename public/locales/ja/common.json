@@ -21,6 +21,9 @@
     "ja": "日本語",
     "en": "English"
   },
+  "smoke": {
+    "remoteAi": "[i18n smoke] smoke.remoteAi（プレースホルダー）"
+  },
   "pages": {
     "home": {
       "sections": {

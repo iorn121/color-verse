@@ -79,6 +79,11 @@ export default function HomePage() {
               title={t('pages.home.items.image.title')}
               description={t('pages.home.items.image.desc')}
             />
+            <PaletteListItem
+              to="/color-analysis"
+              title={t('pages.home.items.colorAnalysis.title')}
+              description={t('pages.home.items.colorAnalysis.desc')}
+            />
           </ul>
         </section>
       </div>

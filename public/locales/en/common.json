@@ -8,6 +8,7 @@
     "convert": "Convert",
     "theory": "Theory",
     "image": "Image",
+    "colorAnalysis": "Color analysis",
     "camera": "Camera",
     "quiz": "JIS Colors Quiz",
     "prismatrix": "Prismatrix",
@@ -56,7 +57,11 @@
           "title": "Hex/RGB/HSL Converter",
           "desc": "Convert between HEX, RGB and HSL swiftly"
         },
-        "image": { "title": "Image Adjuster", "desc": "Adjust brightness, saturation and contrast" }
+        "image": { "title": "Image Adjuster", "desc": "Adjust brightness, saturation and contrast" },
+        "colorAnalysis": {
+          "title": "Image color analysis",
+          "desc": "Dominant palette and average color via K-means on a resized preview"
+        }
       }
     },
     "picker": { "title": "Color Picker" },
@@ -90,6 +95,26 @@
     "imageAdjust": {
       "title": "Image Adjuster",
       "desc": "Adjust brightness, contrast and saturation"
+    },
+    "colorAnalysis": {
+      "title": "Image color analysis",
+      "desc": "Upload an image to extract dominant colors with K-means on a downscaled copy. Near-white/black backgrounds and clusters covering most of the image are grouped separately; slightly saturated colors are boosted when ranking. Click a chip to copy HEX.",
+      "pickImage": "Choose image",
+      "analyzing": "Analyzing…",
+      "average": "Average color",
+      "palette": "Dominant palette",
+      "background": "Detected background colors",
+      "clickCopy": "Click to copy",
+      "copied": "Copied {{hex}}",
+      "copyFailed": "Could not copy",
+      "error": "Could not load this image. Try another file.",
+      "noDominant": "No dominant colors left after background filtering.",
+      "types": {
+        "vibrant": "Vibrant",
+        "muted": "Muted",
+        "light": "Light",
+        "dark": "Dark"
+      }
     },
     "my": {
       "title": "My Page",

@@ -121,6 +121,15 @@ export default function RootLayout() {
                         {t('nav.image')}
                       </NavLink>
                       <NavLink
+                        to="/color-analysis"
+                        style={({ isActive }) => ({
+                          color: isActive ? 'var(--color-primary)' : 'var(--color-text-primary)',
+                        })}
+                        onClick={closeMenu}
+                      >
+                        {t('nav.colorAnalysis')}
+                      </NavLink>
+                      <NavLink
                         to="/camera"
                         style={({ isActive }) => ({
                           color: isActive ? 'var(--color-primary)' : 'var(--color-text-primary)',

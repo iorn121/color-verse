@@ -200,4 +200,55 @@ npm run preview
 
 ### ライセンス
 
-- 後日決定
+- MIT
+
+---
+
+## 改善点バックログ
+
+> 監査日: 2026-05-31。Tech: React 18 / Vite 7 / TypeScript / i18next / PWA。GitHub Pages デプロイ。Dependabot なし・LICENSE なし。
+
+### 機能 (Functionality)
+
+- [ ] `[P1]` WCAG コントラストチェック（色入力から AA/AAA 判定）
+- [ ] `[P2]` パレット生成・保存・エクスポート（CSS/JSON/画像）
+- [ ] `[P2]` `ColorAnalysisPage` / `PrismatrixPage` を README 画面一覧に追記
+- [ ] `[P2]` お気に入りを HEX のみからパレット単位保存へ
+- [ ] `[P2]` IndexedDB 履歴（操作タイムライン等）
+- [ ] `[P3]` WebGL/WASM による画像処理高速化
+- [ ] `[P3]` ファッション特化機能（README アイデア 86–100）を `docs/spec/` に分割
+
+### デザイン/UX (Design)
+
+- [ ] `[P1]` ダークモード切替 UI（`[data-theme='dark']` CSS はあるが切替ロジックなし）
+- [ ] `[P1]` `LanguageSwitcher` を `RootLayout` へ配置し README「UI 切替オフ」と整合
+- [ ] `[P2]` ハードコード日本語の i18n 化（約 15 ファイル）
+- [ ] `[P2]` モバイルナビのフォーカストラップ・Esc 閉じ
+- [ ] `[P2]` PWA `manifest.theme_color` と CSS 基調色の整合
+- [ ] `[P3]` `src/theme/colors.json` を SSOT 化
+- [ ] `[P3]` README「機能アイデア100」を `docs/backlog/` へ移動
+
+### セキュリティ (Security)
+
+- [ ] `[P2]` カメラ/Microphone 権限の説明と HTTPS 要件を各 Camera ページに
+- [ ] `[P2]` `remote-ai-agent.yml` の `CURSOR_API_KEY` 未設定時の挙動を README に
+- [ ] `[P3]` Dependabot（npm + github-actions）導入
+- [ ] `[P3]` `@cursor/sdk` を CI 専用スクリプト分離
+
+### システム設計 (System Design)
+
+- [ ] `[P1]` CI `main-pass` ジョブが main push 時に lint/build 未実行 — 修正または削除
+- [ ] `[P2]` `vite.config.js` と `vite.config.ts` の SSOT 一本化
+- [ ] `[P2]` deploy 前に `typecheck` 実行
+- [ ] `[P2]` Vitest で色変換・JIS CSV パースの回帰テスト
+- [ ] `[P3]` Service Worker 更新戦略のユーザー通知 UX
+- [ ] `[P3]` `public/jis_colors.csv` のバージョン管理ポリシー
+
+### ドキュメント/運用 (Docs & Ops)
+
+- [ ] `[P1]` LICENSE 決定・追加
+- [ ] `[P1]` README を「現状機能/セットアップ/デプロイ/ロードマップ」に再構成
+- [ ] `[P2]` GitHub Pages 公開 URL・`base` パス説明
+- [ ] `[P2]` `npm run check` を main push でも必須化
+- [ ] `[P2]` `docs/spec/<slug>.md` テンプレートと一覧
+- [ ] `[P3]` CHANGELOG / リリースノート運用

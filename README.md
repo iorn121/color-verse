@@ -204,6 +204,28 @@ npm run preview
 
 ---
 
+## 今後の対応策
+
+README の機能アイデア100とバックログを整理しつつ、品質と UX を段階的に上げる。
+
+### 短期
+
+- 衛生 PR #29 をマージする（LICENSE・CI・Dependabot など）
+- 既存の lint / 型エラーを解消し、main 向け CI が安定して通るようにする
+
+### 中期
+
+- ダークモード切替 UI を実装する（CSS の `[data-theme='dark']` と接続）
+- `LanguageSwitcher` を `RootLayout` に配置し、README の UI 方針と整合させる
+- ハードコードされた日本語文言を i18n キーへ移す（優先画面から順次）
+
+### 長期
+
+- WCAG コントラストチェック（色入力から AA/AAA 判定）をコア機能として提供する
+- README の「機能アイデア100」を `docs/backlog/` に分割移管し、README は現状機能とロードマップ中心に再構成する
+
+---
+
 ## 改善点バックログ
 
 > 監査日: 2026-05-31。Tech: React 18 / Vite 7 / TypeScript / i18next / PWA。GitHub Pages デプロイ。Dependabot なし・LICENSE なし。

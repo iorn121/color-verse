@@ -57,7 +57,10 @@
           "title": "Hex/RGB/HSL Converter",
           "desc": "Convert between HEX, RGB and HSL swiftly"
         },
-        "image": { "title": "Image Adjuster", "desc": "Adjust brightness, saturation and contrast" },
+        "image": {
+          "title": "Image Adjuster",
+          "desc": "Adjust brightness, saturation and contrast"
+        },
         "colorAnalysis": {
           "title": "Image color analysis",
           "desc": "Dominant palette and average color via K-means on a resized preview"
@@ -68,7 +71,36 @@
     "convert": { "title": "Hex / RGB / HSL Converter" },
     "theory": {
       "title": "Basic Color Theory (Overview)",
-      "desc": "We cover fundamentals such as color wheel, complements, analogous colors, primary colors, RGB/CMYK differences, and color temperature."
+      "desc": "We cover fundamentals such as color wheel, complements, analogous colors, primary colors, RGB/CMYK differences, and color temperature.",
+      "advancingReceding": {
+        "title": "Advancing and receding colors",
+        "lead": "At the same size, warm colors (red, orange, yellow) tend to come forward, while cool colors (blue, blue-green) tend to sit farther back. Move hue, saturation, and lightness to see how that difference changes.",
+        "note": "The two circles stay the same size and overlap slightly. Size and blur do not change. Higher saturation makes advancing and receding clearer; lowering saturation, or pushing lightness toward white or black, shrinks the difference.",
+        "sides": {
+          "left": "Left circle",
+          "right": "Right circle"
+        },
+        "hue": "Hue",
+        "saturation": "Saturation",
+        "lightness": "Lightness",
+        "valueHue": "{{value}}°",
+        "valuePercent": "{{value}}%",
+        "swap": "Swap sides",
+        "reset": "Restore warm and cool",
+        "tendency": {
+          "advancing": "More advancing",
+          "receding": "More receding",
+          "neutral": "Weak difference"
+        },
+        "comparison": {
+          "left": "The left circle is more likely to look closer.",
+          "right": "The right circle is more likely to look closer.",
+          "similar": "These two colors show little difference in depth."
+        },
+        "aria": {
+          "stage": "Two equal circles overlapping. Compare the left and right colors."
+        }
+      }
     },
     "camera": {
       "title": "Camera Color Picker",

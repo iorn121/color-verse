@@ -64,7 +64,9 @@ async function streamRunToStdout(run) {
         }
         break;
       case 'status':
-        process.stderr.write(`\n[status] ${event.status}${event.message ? ` ${event.message}` : ''}\n`);
+        process.stderr.write(
+          `\n[status] ${event.status}${event.message ? ` ${event.message}` : ''}\n`,
+        );
         break;
       case 'thinking':
         process.stderr.write('.');
@@ -148,13 +150,14 @@ try {
 
     console.error('\nAgent finished:', result.status);
     // ストリームですでに stdout に出している。CI では再ログすると肥大・dispose 前に時間がかかるので既定で省略。
-    const logFinal =
-      process.env.AGENT_LOG_FINAL_RESULT !== 'false' && process.env.CI !== 'true';
+    const logFinal = process.env.AGENT_LOG_FINAL_RESULT !== 'false' && process.env.CI !== 'true';
     if (logFinal && result.result) {
       const text = result.result;
       console.log(text.length > 4000 ? `${text.slice(0, 4000)}…` : text);
     } else if (process.env.CI === 'true' && result.result) {
-      console.error('[ci] Skipped printing final result (already streamed). Set AGENT_LOG_FINAL_RESULT=true to force.');
+      console.error(
+        '[ci] Skipped printing final result (already streamed). Set AGENT_LOG_FINAL_RESULT=true to force.',
+      );
     }
   } finally {
     await disposeAgentWithTimeout(agent);

@@ -147,11 +147,7 @@ function toDominantColor(rgb: Rgb, population: number): DominantColor {
   const hex = c.toHex().toUpperCase();
   const hslObj = c.toHsl();
   const h = Number.isFinite(hslObj.h) ? hslObj.h : 0;
-  const hsl: [number, number, number] = [
-    Math.round(h),
-    Math.round(hslObj.s),
-    Math.round(hslObj.l),
-  ];
+  const hsl: [number, number, number] = [Math.round(h), Math.round(hslObj.s), Math.round(hslObj.l)];
   return {
     hex,
     rgb: [rgb.r, rgb.g, rgb.b],
@@ -250,7 +246,9 @@ export function analyzeImagePixels(pixels: Rgb[]): PaletteAnalysisWithBackground
     return wb - wa;
   });
 
-  const dominant_colors = foreground.slice(0, DOMINANT_LIMIT).map((cl) => toDominantColor(cl.rgb, cl.population));
+  const dominant_colors = foreground
+    .slice(0, DOMINANT_LIMIT)
+    .map((cl) => toDominantColor(cl.rgb, cl.population));
 
   const output: PaletteAnalysisWithBackground = {
     dominant_colors,

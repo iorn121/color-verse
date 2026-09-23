@@ -1,6 +1,6 @@
 name: AI エージェント依頼（Remote AI Agent）
 description: Cursor エージェントにリポジトリ上で作業させる（GitHub Actions）
-title: "[AI] "
+title: '[AI] '
 labels: []
 body:
   - type: markdown

@@ -17,29 +17,32 @@ export default function ImagePaletteAnalyzer() {
   const [result, setResult] = useState<PaletteAnalysisWithBackground | null>(null);
   const [toast, setToast] = useState<string | null>(null);
 
-  const onFile = useCallback(async (file: File | undefined) => {
-    if (!file) return;
-    setBusy(true);
-    setToast(null);
-    setResult(null);
-    const url = URL.createObjectURL(file);
-    setPreviewUrl((prev) => {
-      if (prev) URL.revokeObjectURL(prev);
-      return url;
-    });
-    try {
-      const data = await analyzeImageFile(file);
-      setResult(data);
-    } catch {
-      setToast(t('pages.colorAnalysis.error'));
+  const onFile = useCallback(
+    async (file: File | undefined) => {
+      if (!file) return;
+      setBusy(true);
+      setToast(null);
+      setResult(null);
+      const url = URL.createObjectURL(file);
       setPreviewUrl((prev) => {
         if (prev) URL.revokeObjectURL(prev);
-        return null;
+        return url;
       });
-    } finally {
-      setBusy(false);
-    }
-  }, [t]);
+      try {
+        const data = await analyzeImageFile(file);
+        setResult(data);
+      } catch {
+        setToast(t('pages.colorAnalysis.error'));
+        setPreviewUrl((prev) => {
+          if (prev) URL.revokeObjectURL(prev);
+          return null;
+        });
+      } finally {
+        setBusy(false);
+      }
+    },
+    [t],
+  );
 
   const copyHex = useCallback(
     async (hex: string) => {
@@ -105,7 +108,10 @@ export default function ImagePaletteAnalyzer() {
         <div style={{ display: 'grid', gap: 20 }}>
           <section style={{ display: 'grid', gap: 10 }}>
             <h2 style={{ margin: 0, fontSize: '1.1rem' }}>{t('pages.colorAnalysis.average')}</h2>
-            <AverageSwatch hex={result.average_color} onCopy={() => copyHex(result.average_color)} />
+            <AverageSwatch
+              hex={result.average_color}
+              onCopy={() => copyHex(result.average_color)}
+            />
           </section>
 
           <section style={{ display: 'grid', gap: 10 }}>
@@ -125,7 +131,9 @@ export default function ImagePaletteAnalyzer() {
 
           {result.background_colors.length > 0 && (
             <section style={{ display: 'grid', gap: 10 }}>
-              <h2 style={{ margin: 0, fontSize: '1.1rem' }}>{t('pages.colorAnalysis.background')}</h2>
+              <h2 style={{ margin: 0, fontSize: '1.1rem' }}>
+                {t('pages.colorAnalysis.background')}
+              </h2>
               <div className="flex flex-wrap gap-md">
                 {result.background_colors.map((c, i) => (
                   <ColorChip key={`bg-${i}`} color={c} onCopy={() => copyHex(c.hex)} />

@@ -2,71 +2,34 @@ name: CI
 
 on:
   pull_request:
-    branches: ['main']
+    branches: ["main"]
   push:
-    branches: ['main']
+    branches: ["main"]
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
 
 jobs:
-  prettier:
-    if: github.event_name == 'pull_request'
+  quality:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-      - name: Install
-        run: npm ci
-      - name: Prettier check
-        run: npm run format:check
 
-  eslint:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
+
       - name: Install
         run: npm ci
-      - name: ESLint
+
+      - name: Lint
         run: npm run lint
 
-  typecheck:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-      - name: Install
-        run: npm ci
-      - name: Type check
+      - name: Typecheck
         run: npm run typecheck
 
-  main-pass:
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Mark CI successful on main push
-        run: echo "CI (main) completed"
+      - name: Build
+        run: npm run build

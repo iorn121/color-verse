@@ -69,6 +69,28 @@
     },
     "picker": { "title": "Color Picker" },
     "convert": { "title": "Hex / RGB / HSL Converter" },
+    "compare": {
+      "title": "Color compare (contrast)",
+      "desc": "Preview a foreground on a background and check the WCAG 2.1 contrast ratio for normal text, including AA and AAA.",
+      "foreground": "Foreground (text)",
+      "background": "Background",
+      "swap": "Swap foreground and background",
+      "previewTitle": "Preview",
+      "previewAria": "Foreground and background preview",
+      "sampleText": "Sample text for readability — 読みやすさのサンプル文。",
+      "contrast": {
+        "title": "Contrast ratio",
+        "invalidInput": "Enter valid HEX (#RRGGBB or #RGB) for both foreground and background.",
+        "aaLabel": "AA (normal text 4.5:1)",
+        "aaaLabel": "AAA (normal text 7:1)",
+        "met": "Pass",
+        "notMet": "Fail",
+        "aaFailTitle": "Insufficient contrast (AA fail)",
+        "aaFailBody": "Normal-sized text may be hard to read. Increase lightness difference between foreground and background.",
+        "aaaHint": "AA is met, but AAA (7:1) is not reached yet.",
+        "allMet": "Both AA and AAA are met."
+      }
+    },
     "theory": {
       "title": "Basic Color Theory (Overview)",
       "desc": "We cover fundamentals such as color wheel, complements, analogous colors, primary colors, RGB/CMYK differences, and color temperature.",

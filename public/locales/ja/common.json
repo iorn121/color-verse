@@ -51,6 +51,28 @@
     },
     "picker": { "title": "カラーピッカー" },
     "convert": { "title": "Hex / RGB / HSL 変換" },
+    "compare": {
+      "title": "色の比較（コントラスト）",
+      "desc": "前景色と背景色の組み合わせをプレビューし、WCAG 2.1 の通常テキスト向けコントラスト比と AA / AAA の達成可否を確認できます。",
+      "foreground": "前景色（文字）",
+      "background": "背景色",
+      "swap": "前景と背景を入れ替え",
+      "previewTitle": "プレビュー",
+      "previewAria": "前景色と背景色のプレビュー",
+      "sampleText": "読みやすさのサンプル文 — Sample text for readability.",
+      "contrast": {
+        "title": "コントラスト比",
+        "invalidInput": "有効な HEX（#RRGGBB または #RGB）を前景・背景の両方に入力してください。",
+        "aaLabel": "AA（通常テキスト 4.5:1）",
+        "aaaLabel": "AAA（通常テキスト 7:1）",
+        "met": "達成",
+        "notMet": "未達",
+        "aaFailTitle": "コントラスト不足（AA 未達）",
+        "aaFailBody": "通常サイズの文字では読みにくい可能性があります。前景または背景の明度差を大きくしてください。",
+        "aaaHint": "AA は満たしていますが、AAA（7:1）には届いていません。",
+        "allMet": "AA と AAA の両方を満たしています。"
+      }
+    },
     "theory": {
       "title": "基本的な色彩理論（概要）",
       "desc": "ここでは色相環、補色、類似色、三原色、RGB/CMYK の違い、色温度などの基礎を順次掲載していきます",

@@ -1,0 +1,26 @@
+{
+  "name": "color-verse",
+  "automation": "unattended",
+  "model": "composer-2.5",
+  "specDir": "docs/specs",
+  "stack": "node",
+  "testing": {
+    "profile": "web-ui"
+  },
+  "commands": {
+    "install": "npm ci",
+    "verify": ["npm run check", "npm run test:unit", "npm run build", "npm run test:e2e"]
+  },
+  "release": {
+    "base": "main",
+    "mode": "pull-request"
+  },
+  "gates": {
+    "afterSpecify": false,
+    "beforeRelease": false
+  },
+  "limits": {
+    "verifyRetries": 2,
+    "timeoutMs": 1800000
+  }
+}

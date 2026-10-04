@@ -11,3 +11,7 @@ dev-dist
 .env
 .env.*
 *.local
+.harness/
+test-results/
+playwright-report/
+blob-report/

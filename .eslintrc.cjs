@@ -18,6 +18,13 @@ module.exports = {
       files: ['scripts/**/*.mjs'],
       env: { node: true, browser: false },
     },
+    {
+      files: ['e2e/**/*.ts', 'tests/**/*.ts', 'vitest.config.ts', 'playwright.config.ts'],
+      env: { node: true, browser: false },
+      rules: {
+        'import/no-unresolved': 'off',
+      },
+    },
   ],
   plugins: ['@typescript-eslint', 'react', 'react-hooks', 'import', 'simple-import-sort'],
   extends: [

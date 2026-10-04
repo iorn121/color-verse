@@ -12,6 +12,9 @@
     "lint": "eslint . --ext .ts,.tsx,.mjs --max-warnings=0",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:update": "playwright test --update-snapshots",
     "check": "npm run format:check && npm run lint && npm run typecheck"
   },
   "dependencies": {
@@ -30,6 +33,7 @@
   },
   "devDependencies": {
     "@cursor/sdk": "^1.0.12",
+    "@playwright/test": "^1.63.0",
     "@types/node": "^20.12.12",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
@@ -47,6 +51,7 @@
     "prettier": "^3.3.3",
     "typescript": "5.5.4",
     "vite": "^7.2.7",
-    "vite-plugin-pwa": "^1.2.0"
+    "vite-plugin-pwa": "^1.2.0",
+    "vitest": "^4.1.11"
   }
 }

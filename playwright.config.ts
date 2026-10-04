@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const repoName = process.env.GITHUB_REPOSITORY?.split('/')[1];
+const appBase = repoName ? `/${repoName}/` : '/';
+
 export default defineConfig({
   testDir: './e2e',
   snapshotPathTemplate: '{testDir}/{testFilePath}-snapshots/{arg}-{platform}{ext}',
@@ -11,7 +14,7 @@ export default defineConfig({
     toHaveScreenshot: { maxDiffPixelRatio: 0.01 },
   },
   use: {
-    baseURL: 'http://127.0.0.1:4173',
+    baseURL: `http://127.0.0.1:4173${appBase}`,
     viewport: { width: 1280, height: 720 },
     locale: 'ja-JP',
     reducedMotion: 'reduce',

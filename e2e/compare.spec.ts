@@ -7,7 +7,7 @@ async function setPair(page: Page, foreground: string, background: string) {
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/compare?lng=ja');
+  await page.goto('compare?lng=ja');
   await expect(page.getByRole('heading', { name: '色の比較（コントラスト）' })).toBeVisible();
 });
 

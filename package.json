@@ -34,7 +34,7 @@
   "devDependencies": {
     "@cursor/sdk": "^1.0.12",
     "@playwright/test": "^1.63.0",
-    "@types/node": "^20.12.12",
+    "@types/node": "^26.6.3",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.15.0",

@@ -12,6 +12,7 @@ dev-dist
 .env.*
 *.local
 .harness/
+.ai-harness/
 test-results/
 playwright-report/
 blob-report/

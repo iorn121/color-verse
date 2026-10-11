@@ -274,3 +274,5 @@ README の機能アイデア100とバックログを整理しつつ、品質と 
 - [ ] `[P2]` `npm run check` を main push でも必須化
 - [ ] `[P2]` `docs/spec/<slug>.md` テンプレートと一覧
 - [ ] `[P3]` CHANGELOG / リリースノート運用
+
+動作確認: リポジトリルートで `npm run dev` を実行し、ブラウザで http://localhost:5173 が表示されればセットアップは問題ありません。

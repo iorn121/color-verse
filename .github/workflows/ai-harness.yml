@@ -58,12 +58,12 @@ jobs:
           fi
 
       - name: Checkout product
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Checkout harness
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: ${{ vars.AI_HARNESS_REPOSITORY }}
           ref: ${{ vars.AI_HARNESS_REF || 'main' }}

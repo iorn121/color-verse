@@ -1,6 +1,43 @@
 import { z } from 'zod';
 
 import type { Hex } from './color';
+
+let cachedJisColors: Promise<JisColor[]> | undefined;
+
+/** テストで CSV キャッシュを捨てる。 */
+export function clearCachedJisColors(): void {
+  cachedJisColors = undefined;
+}
+
+function abortReason(signal: AbortSignal): unknown {
+  return signal.reason ?? new DOMException('The operation was aborted.', 'AbortError');
+}
+
+async function readJisColors(): Promise<JisColor[]> {
+  const res = await fetch(`${import.meta.env.BASE_URL}jis_colors.csv`);
+  if (!res.ok) throw new Error(`Failed to load jis_colors.csv: ${res.status}`);
+  const text = await res.text();
+  return JisColorModel.parseCsv(text);
+}
+
+async function loadCachedJisColors(signal?: AbortSignal): Promise<JisColor[]> {
+  if (signal?.aborted) throw abortReason(signal);
+  if (!cachedJisColors) {
+    cachedJisColors = readJisColors().catch((error: unknown) => {
+      cachedJisColors = undefined;
+      throw error;
+    });
+  }
+  const pending = cachedJisColors;
+  if (!signal) return pending;
+  return new Promise((resolve, reject) => {
+    const onAbort = () => reject(abortReason(signal));
+    signal.addEventListener('abort', onAbort, { once: true });
+    pending.then(resolve, reject).finally(() => {
+      signal.removeEventListener('abort', onAbort);
+    });
+  });
+}
 export interface JisColor {
   readonly name: string;
   readonly reading?: string; // 慣用色名の読み
@@ -53,10 +90,7 @@ export const JisColorModel = {
    * サーバーからCSVを取得して配列に変換する。
    */
   async loadAll(signal?: AbortSignal): Promise<JisColor[]> {
-    const res = await fetch(`${import.meta.env.BASE_URL}jis_colors.csv`, { signal });
-    if (!res.ok) throw new Error(`Failed to load jis_colors.csv: ${res.status}`);
-    const text = await res.text();
-    return this.parseCsv(text);
+    return loadCachedJisColors(signal);
   },
 
   /**

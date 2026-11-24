@@ -1,28 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import { ColorQuizRound, type QuizMode, type QuizQuestion } from '../domain/color-quiz';
 import type { JisColor } from '../lib/jisColors';
-import { getRandomInt, pickRandom } from '../lib/jisColors';
+import { getRandomInt } from '../lib/jisColors';
 
-export type QuizMode = 'name-to-color' | 'color-to-name';
-
-export type QuizQuestion = {
-  mode: QuizMode;
-  correct: JisColor;
-  options: JisColor[]; // 4択
-};
+export type { QuizMode, QuizQuestion };
 
 function buildQuestion(colors: JisColor[], mode: QuizMode): QuizQuestion {
-  const correct = colors[getRandomInt(colors.length)];
-  const distractors = pickRandom(
-    colors.filter((c) => c.hex !== correct.hex || c.name !== correct.name),
-    3,
-  );
-  const options = [...distractors, correct];
-  for (let i = options.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [options[i], options[j]] = [options[j], options[i]];
-  }
-  return { mode, correct, options };
+  const round = ColorQuizRound.deal(colors, mode, { int: getRandomInt });
+  if (!round) throw new Error('not enough colors');
+  return round.question;
 }
 
 export function useColorQuiz(colors: JisColor[], mode: QuizMode) {
@@ -45,7 +32,7 @@ export function useColorQuiz(colors: JisColor[], mode: QuizMode) {
   const isCorrect = useMemo<boolean | null>(() => {
     if (!question || !selectedKey) return null;
     const [hex, name] = selectedKey.split('|');
-    return hex === question.correct.hex && name === question.correct.name;
+    return ColorQuizRound.grade(question, hex, name);
   }, [question, selectedKey]);
 
   const handleAnswer = (opt: JisColor) => {

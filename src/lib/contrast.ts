@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
+import { Swatch } from '../domain/swatch';
 import type { Hex, Rgb } from './color';
-import { hexToRgb, rgbToHex } from './color';
 
 export const WCAG_AA_NORMAL = 4.5;
 export const WCAG_AAA_NORMAL = 7;
@@ -40,33 +40,13 @@ export function contrastRatio(foreground: Rgb, background: Rgb): number {
   return (lighter + 0.05) / (darker + 0.05);
 }
 
-function contrastLevel(ratio: number): z.infer<typeof ContrastLevelSchema> {
-  if (ratio < WCAG_AA_NORMAL) return 'aa_fail';
-  if (ratio < WCAG_AAA_NORMAL) return 'aa_pass_aaa_fail';
-  return 'aaa_pass';
-}
-
 export function formatContrastRatio(ratio: number): string {
   return `${ratio.toFixed(2)}:1`;
 }
 
 export function evaluateContrast(foregroundHex: Hex, backgroundHex: Hex): ContrastResult | null {
-  const fgRgb = hexToRgb(foregroundHex);
-  const bgRgb = hexToRgb(backgroundHex);
-  if (!fgRgb || !bgRgb) return null;
-
-  const foreground = rgbToHex(fgRgb);
-  const background = rgbToHex(bgRgb);
-  const ratio = contrastRatio(fgRgb, bgRgb);
-  const aaMet = ratio >= WCAG_AA_NORMAL;
-  const aaaMet = ratio >= WCAG_AAA_NORMAL;
-
-  return ContrastResultSchema.parse({
-    ratio,
-    foreground,
-    background,
-    aaMet,
-    aaaMet,
-    level: contrastLevel(ratio),
-  });
+  const foreground = Swatch.parse(foregroundHex);
+  const background = Swatch.parse(backgroundHex);
+  if (!foreground || !background) return null;
+  return foreground.contrastWith(background);
 }

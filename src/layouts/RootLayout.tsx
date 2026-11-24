@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 
@@ -202,7 +202,9 @@ export default function RootLayout() {
       </header>
       <main className="section">
         <div className="container">
-          <Outlet />
+          <Suspense fallback={<p>読み込み中…</p>}>
+            <Outlet />
+          </Suspense>
         </div>
       </main>
       <footer>

@@ -1,5 +1,5 @@
 # スマホの GitHub アプリから Run workflow で起動する。
-# Secret: CURSOR_API_KEY
+# Secret: CLAUDE_CODE_OAUTH_TOKEN または ANTHROPIC_API_KEY
 # Variable: AI_HARNESS_REPOSITORY=iorn121/ai-harness
 # マージはしない。
 name: AI Harness
@@ -48,12 +48,13 @@ jobs:
       pull-requests: write
       issues: read
     steps:
-      - name: Require Cursor API key
+      - name: Require Claude credentials
         env:
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          if [ -z "${CURSOR_API_KEY:-}" ]; then
-            echo "::error::Repository secret CURSOR_API_KEY is not set."
+          if [ -z "${CLAUDE_CODE_OAUTH_TOKEN:-}" ] && [ -z "${ANTHROPIC_API_KEY:-}" ]; then
+            echo "::error::Set CLAUDE_CODE_OAUTH_TOKEN (claude setup-token) or ANTHROPIC_API_KEY."
             exit 1
           fi
 
@@ -77,6 +78,9 @@ jobs:
       - name: Install harness
         working-directory: .ai-harness
         run: npm ci
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
 
       - name: Install product
         run: npm ci
@@ -102,7 +106,8 @@ jobs:
       - name: Run harness
         working-directory: .ai-harness
         env:
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GH_TOKEN: ${{ github.token }}
         run: |
           STAGE="${{ github.event_name == 'issues' && 'all' || github.event.inputs.stage }}"

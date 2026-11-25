@@ -1,7 +1,7 @@
 {
   "name": "color-verse",
   "automation": "unattended",
-  "model": "composer-2.5",
+  "model": "sonnet",
   "specDir": "docs/specs",
   "stack": "node",
   "testing": {

@@ -29,7 +29,7 @@
     "react-i18next": "^17.1.9",
     "react-router-dom": "^6.26.2",
     "react-webcam": "^7.2.0",
-    "zod": "^4.6.5"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@cursor/sdk": "^1.0.35",

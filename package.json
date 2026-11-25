@@ -32,7 +32,6 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
-    "@cursor/sdk": "^1.0.35",
     "@playwright/test": "^1.63.0",
     "@types/node": "^26.6.4",
     "@types/react": "^19.3.0",

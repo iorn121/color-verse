@@ -1,5 +1,5 @@
 name: AI エージェント依頼（Remote AI Agent）
-description: Cursor エージェントにリポジトリ上で作業させる（GitHub Actions）
+description: Claude にリポジトリ上で作業させる（GitHub Actions）
 title: '[AI] '
 labels: []
 body:
@@ -10,7 +10,7 @@ body:
 
         - ワークフローは Issue の **タイトルに `[AI]` が含まれる**ときだけ走ります（このテンプレでは先頭が `[AI] ` になっています。続きに短い要約を書いてください）。
         - **起票者が Owner / Member / Collaborator** のときだけ実行されます。
-        - リポジトリの **Actions 用シークレット `CURSOR_API_KEY`** が設定されている必要があります。
+        - リポジトリの **Actions 用シークレット `CLAUDE_CODE_OAUTH_TOKEN`**（`claude setup-token`）または **`ANTHROPIC_API_KEY`** が設定されている必要があります。
         - 結果は **Pull Request** として作成されます。マージは人間が確認してから行ってください。
   - type: textarea
     id: task

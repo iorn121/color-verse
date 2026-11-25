@@ -1,39 +1,20 @@
 /**
- * GitHub Actions 用: Issue 本文からプロンプトを読み、@cursor/sdk のローカルエージェントを 1 回実行する。
- * 事前に agent-prompt.txt（または AGENT_PROMPT_FILE）を用意し、CURSOR_API_KEY を渡す。
- *
- * Agent.prompt だと長時間無出力になりやすいため、send + stream でログを出す。
- * AGENT_TIMEOUT_MS（既定 30 分）で打ち切り、可能なら run.cancel() する。
+ * GitHub Actions 用: Issue 本文からプロンプトを読み、Claude Code を 1 回実行する。
+ * 事前に agent-prompt.txt（または AGENT_PROMPT_FILE）を用意する。
+ * 認証は claude login、CLAUDE_CODE_OAUTH_TOKEN、ANTHROPIC_API_KEY のいずれか。
+ * AGENT_TIMEOUT_MS（既定 30 分）で打ち切る。
  */
-import { EventEmitter, setMaxListeners } from 'node:events';
-import { readFileSync } from 'node:fs';
-
-/**
- * Node は同一 EventTarget（AbortSignal 含む）に同一イベントのリスナが既定 10 を超えると
- * MaxListenersExceededWarning を出す。@cursor/sdk は内部で abort ハンドラを複数登録するため
- * 警告になるが、リークではなく想定動作に近い。SDK を読み込む前に既定上限だけ引き上げる。
- */
-function configureListenerBudgetForSdk() {
-  setMaxListeners(32);
-  EventEmitter.defaultMaxListeners = 32;
-}
-
-configureListenerBudgetForSdk();
-
-const { Agent, CursorAgentError } = await import('@cursor/sdk');
-
-const apiKey = process.env.CURSOR_API_KEY;
-if (!apiKey?.trim()) {
-  console.error('CURSOR_API_KEY is not set. Add the repository secret CURSOR_API_KEY.');
-  process.exit(1);
-}
+import { spawn } from 'node:child_process';
+import { existsSync, readFileSync } from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
 const promptFile = process.env.AGENT_PROMPT_FILE ?? 'agent-prompt.txt';
 let userPrompt;
 try {
   userPrompt = readFileSync(promptFile, 'utf8');
-} catch (e) {
-  console.error(`Failed to read prompt file: ${promptFile}`, e);
+} catch (error) {
+  console.error(`Failed to read prompt file: ${promptFile}`, error);
   process.exit(1);
 }
 
@@ -48,129 +29,118 @@ if (!Number.isFinite(timeoutMs) || timeoutMs < 1) {
   process.exit(1);
 }
 
-/**
- * @param {import('@cursor/sdk').Run} run
- */
-async function streamRunToStdout(run) {
-  for await (const event of run.stream()) {
-    switch (event.type) {
-      case 'assistant':
-        for (const block of event.message.content) {
-          if (block.type === 'text') {
-            process.stdout.write(block.text);
-          } else if (block.type === 'tool_use') {
-            process.stderr.write(`\n[tool] ${block.name}\n`);
-          }
-        }
-        break;
-      case 'status':
-        process.stderr.write(
-          `\n[status] ${event.status}${event.message ? ` ${event.message}` : ''}\n`,
-        );
-        break;
-      case 'thinking':
-        process.stderr.write('.');
-        break;
-      case 'tool_call':
-        process.stderr.write(`\n[tool_call] ${event.name} (${event.status})\n`);
-        break;
-      default:
-        break;
-    }
-  }
-}
+const model = process.env.CLAUDE_MODEL?.trim() || 'sonnet';
+const bin = resolveClaudeBin();
 
-/**
- * @param {import('@cursor/sdk').Run} run
- */
-async function runWithTimeout(run) {
-  const work = (async () => {
-    await streamRunToStdout(run);
-    return await run.wait();
-  })();
+console.error(`Claude starting (timeout ${timeoutMs}ms, model ${model})…\n`);
 
-  let timeoutId;
-  const timeoutPromise = new Promise((_, reject) => {
-    timeoutId = setTimeout(() => {
-      reject(new Error(`Agent timed out after ${timeoutMs}ms (set AGENT_TIMEOUT_MS to adjust)`));
-    }, timeoutMs);
-  });
+const child = spawn(
+  bin,
+  [
+    '-p',
+    '--output-format',
+    'stream-json',
+    '--verbose',
+    '--permission-mode',
+    'bypassPermissions',
+    '--dangerously-skip-permissions',
+    '--model',
+    model,
+    '--setting-sources',
+    'project',
+  ],
+  { cwd: process.cwd(), stdio: ['pipe', 'pipe', 'pipe'] },
+);
 
-  try {
-    return await Promise.race([work, timeoutPromise]);
-  } catch (e) {
-    if (run.supports('cancel')) {
-      process.stderr.write('\n[cancel] stopping agent run after error or timeout…\n');
-      await run.cancel().catch(() => {});
-    }
-    throw e;
-  } finally {
-    clearTimeout(timeoutId);
-  }
-}
+let settled = false;
+let resultText = '';
+let lineBuffer = '';
+const timer = setTimeout(() => {
+  console.error(`\n[cancel] stopping Claude after ${timeoutMs}ms\n`);
+  child.kill('SIGTERM');
+}, timeoutMs);
 
-/**
- * asyncDispose が完了しないと process.exit(0) に届かず GHA のステップが終わらないことがある。
- */
-async function disposeAgentWithTimeout(agent) {
-  const ms = Number(process.env.AGENT_DISPOSE_TIMEOUT_MS ?? 30_000);
-  if (!Number.isFinite(ms) || ms < 1) {
-    await agent[Symbol.asyncDispose]();
+child.stdout.on('data', (chunk) => {
+  lineBuffer += String(chunk);
+  const lines = lineBuffer.split('\n');
+  lineBuffer = lines.pop() ?? '';
+  for (const line of lines) takeLine(line);
+});
+child.stderr.on('data', (chunk) => process.stderr.write(chunk));
+child.on('error', (error) => {
+  if (error && error.code === 'ENOENT') {
+    console.error('claude command was not found. Install Claude Code and put it on PATH.');
+    finish(1);
     return;
   }
+  console.error(error);
+  finish(1);
+});
+child.on('close', (code) => {
+  if (lineBuffer) takeLine(lineBuffer);
+  if (settled) return;
+  if (code !== 0) {
+    console.error(`\nClaude exited ${code ?? 'null'}`);
+    finish(code || 1);
+    return;
+  }
+  const logFinal = process.env.AGENT_LOG_FINAL_RESULT !== 'false' && process.env.CI !== 'true';
+  if (logFinal && resultText) {
+    console.log(resultText.length > 4000 ? `${resultText.slice(0, 4000)}…` : resultText);
+  }
+  console.error('\nClaude finished.');
+  finish(0);
+});
+
+child.stdin.write(userPrompt);
+child.stdin.end();
+
+/**
+ * @param {string} line
+ */
+function takeLine(line) {
+  const trimmed = line.trim();
+  if (!trimmed.startsWith('{')) return;
+  let event;
   try {
-    await Promise.race([
-      agent[Symbol.asyncDispose](),
-      new Promise((_, reject) => {
-        setTimeout(() => reject(new Error(`dispose timed out after ${ms}ms`)), ms);
-      }),
-    ]);
-  } catch (e) {
-    console.error('[dispose]', e instanceof Error ? e.message : e);
+    event = JSON.parse(trimmed);
+  } catch {
+    return;
+  }
+  if (event.type === 'assistant') {
+    for (const block of event.message?.content ?? []) {
+      if (block.type === 'text' && block.text) process.stdout.write(block.text);
+      else if (block.type === 'tool_use' && block.name) process.stderr.write(`\n[tool] ${block.name}\n`);
+    }
+  } else if (event.type === 'result' && typeof event.result === 'string') {
+    resultText = event.result;
+    if (event.is_error === true || event.subtype === 'error') {
+      console.error('\nClaude run finished with status error.');
+      finish(2);
+    }
   }
 }
 
-try {
-  console.error(`Agent starting (timeout ${timeoutMs}ms)…\n`);
+/**
+ * @param {number} code
+ */
+function finish(code) {
+  if (settled) return;
+  settled = true;
+  clearTimeout(timer);
+  process.exit(code);
+}
 
-  const agent = await Agent.create({
-    apiKey,
-    model: { id: 'composer-2' },
-    local: { cwd: process.cwd(), settingSources: [] },
-  });
-
-  try {
-    const run = await agent.send(userPrompt);
-    const result = await runWithTimeout(run);
-
-    if (result.status === 'error') {
-      console.error('Agent run finished with status error.');
-      process.exit(2);
-    }
-
-    console.error('\nAgent finished:', result.status);
-    // ストリームですでに stdout に出している。CI では再ログすると肥大・dispose 前に時間がかかるので既定で省略。
-    const logFinal = process.env.AGENT_LOG_FINAL_RESULT !== 'false' && process.env.CI !== 'true';
-    if (logFinal && result.result) {
-      const text = result.result;
-      console.log(text.length > 4000 ? `${text.slice(0, 4000)}…` : text);
-    } else if (process.env.CI === 'true' && result.result) {
-      console.error(
-        '[ci] Skipped printing final result (already streamed). Set AGENT_LOG_FINAL_RESULT=true to force.',
-      );
-    }
-  } finally {
-    await disposeAgentWithTimeout(agent);
+function resolveClaudeBin() {
+  if (process.env.CLAUDE_BIN?.trim()) return process.env.CLAUDE_BIN.trim();
+  for (const directory of (process.env.PATH ?? '').split(path.delimiter)) {
+    if (!directory) continue;
+    const candidate = path.join(directory, 'claude');
+    if (existsSync(candidate)) return candidate;
   }
-  // SDK 内部の保留ハンドル（AbortSignal 等）でイベントループが空にならず、
-  // GHA の「Run Cursor agent」ステップが終了しないことがあるため明示終了する。
-  console.error('[ci] Agent script exiting.');
-  process.exit(0);
-} catch (err) {
-  if (err instanceof CursorAgentError) {
-    console.error('CursorAgentError:', err.message);
-    process.exit(1);
+  const home = process.env.HOME || os.homedir();
+  for (const candidate of [path.join(home, '.local', 'bin', 'claude'), '/usr/local/bin/claude']) {
+    if (existsSync(candidate)) return candidate;
   }
-  console.error(err);
-  process.exit(1);
+  return 'claude';
 }

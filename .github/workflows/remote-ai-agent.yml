@@ -1,5 +1,5 @@
 # Issue タイトルに [AI] を含み、かつ信頼できる起票者のみ実行。
-# リポジトリシークレット CURSOR_API_KEY（Cursor ダッシュボードで発行）が必須。
+# リポジトリシークレット CLAUDE_CODE_OAUTH_TOKEN（claude setup-token）または ANTHROPIC_API_KEY が必須。
 name: Remote AI Agent
 
 on:
@@ -15,14 +15,14 @@ concurrency:
 
 jobs:
   maintenance:
-    name: Cursor agent and PR
+    name: Claude agent and PR
     if: >
       contains(github.event.issue.title, '[AI]') &&
       (github.event.issue.author_association == 'OWNER' ||
        github.event.issue.author_association == 'MEMBER' ||
        github.event.issue.author_association == 'COLLABORATOR')
     runs-on: ubuntu-latest
-    # SDK / ジョブの二重枠: 通常は AGENT_TIMEOUT_MS より前に打ち切られる
+    # 通常は AGENT_TIMEOUT_MS より前に打ち切られる
     timeout-minutes: 45
     permissions:
       contents: write
@@ -33,12 +33,13 @@ jobs:
       PROMPT_PATH: /tmp/remote-ai-agent-prompt.txt
 
     steps:
-      - name: Require Cursor API key
+      - name: Require Claude credentials
         env:
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          if [ -z "${CURSOR_API_KEY:-}" ]; then
-            echo "::error::Repository secret CURSOR_API_KEY is not set. Add it under Settings → Secrets and variables → Actions."
+          if [ -z "${CLAUDE_CODE_OAUTH_TOKEN:-}" ] && [ -z "${ANTHROPIC_API_KEY:-}" ]; then
+            echo "::error::Set CLAUDE_CODE_OAUTH_TOKEN (claude setup-token) or ANTHROPIC_API_KEY."
             exit 1
           fi
 
@@ -54,13 +55,16 @@ jobs:
       - name: Install
         run: npm ci
 
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
       - name: Build agent prompt (shell-safe)
         env:
           ISSUE_HTML_URL: ${{ github.event.issue.html_url }}
         run: |
           set -euo pipefail
           {
-            echo "You are working on this Git repository. Obey \`.cursorrules\` and existing patterns."
+            echo "You are working on this Git repository. Obey \`.cursorrules\`, \`CLAUDE.md\`, and existing patterns."
             echo "Repository: ${GITHUB_REPOSITORY}"
             echo "Issue URL: ${ISSUE_HTML_URL}"
             echo ""
@@ -69,14 +73,13 @@ jobs:
             jq -r '"## " + .issue.title + "\n\n" + (.issue.body // "")' "${GITHUB_EVENT_PATH}"
           } > "${PROMPT_PATH}"
 
-      - name: Run Cursor agent (@cursor/sdk)
+      - name: Run Claude
         env:
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           AGENT_PROMPT_FILE: ${{ env.PROMPT_PATH }}
           # 30 分で打ち切り（ミリ秒）。必要ならリポジトリ Variables で上書き可
           AGENT_TIMEOUT_MS: ${{ vars.AGENT_TIMEOUT_MS || '1800000' }}
-          # agent[asyncDispose] が返らないと GHA のこのステップが終わらないため上限を付与
-          AGENT_DISPOSE_TIMEOUT_MS: '30000'
         run: node scripts/remote-ai-agent.mjs
 
       - name: Typecheck

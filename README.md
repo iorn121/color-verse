@@ -253,9 +253,8 @@ README の機能アイデア100とバックログを整理しつつ、品質と 
 ### セキュリティ (Security)
 
 - [ ] `[P2]` カメラ/Microphone 権限の説明と HTTPS 要件を各 Camera ページに
-- [ ] `[P2]` `remote-ai-agent.yml` の `CURSOR_API_KEY` 未設定時の挙動を README に
+- [ ] `[P2]` `remote-ai-agent.yml` の Claude 認証未設定時の挙動を README に
 - [ ] `[P3]` Dependabot（npm + github-actions）導入
-- [ ] `[P3]` `@cursor/sdk` を CI 専用スクリプト分離
 
 ### システム設計 (System Design)
 
